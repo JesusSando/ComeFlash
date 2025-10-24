@@ -26,7 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.navigation.compose.rememberNavController
-import com.example.comeflash.navegacion.NavegarPagina
+//import com.example.comeflash.navegacion.NavegarPagina
 
 
 @Composable
