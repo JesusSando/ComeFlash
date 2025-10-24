@@ -1,4 +1,4 @@
-package com.example.comeflash.model
+package com.example.comeflash.data.model
 
 data class Usuario(
     val nombre: String = "",

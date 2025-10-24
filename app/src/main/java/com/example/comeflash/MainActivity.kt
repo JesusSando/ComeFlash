@@ -6,8 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
-import com.example.comeflash.navegacion.NavPag
-import com.example.comeflash.navegacion.NavPag
+import com.example.comeflash.navegation.NavPag
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

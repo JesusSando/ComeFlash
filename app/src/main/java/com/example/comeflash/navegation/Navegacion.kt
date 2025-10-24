@@ -1,10 +1,9 @@
-package com.example.comeflash.navegacion
+package com.example.comeflash.navegation
 
 
 import com.example.comeflash.ui.pantalla.PantallaPrincipal
 import com.example.comeflash.ui.pantalla.PantallaCarrito
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable

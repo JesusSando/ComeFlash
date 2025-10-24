@@ -2,7 +2,7 @@ package com.example.comeflash.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.comeflash.model.Usuario
+import com.example.comeflash.data.model.Usuario
 import kotlin.text.contains
 import kotlin.text.isBlank
 
