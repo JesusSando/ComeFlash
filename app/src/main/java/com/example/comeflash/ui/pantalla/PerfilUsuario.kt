@@ -27,12 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.comeflash.R
-import com.example.comeflash.viewmodel.AuthViewModel
+
 import androidx.compose.runtime.getValue
 
 @Composable
-fun PerfilPantalla(navController: NavController, viewModel: AuthViewModel= viewModel()) {
-    val usuario by viewModel.usuario
+fun PerfilPantalla(navController: NavController) {
+
+
 
     Box(
         modifier = Modifier

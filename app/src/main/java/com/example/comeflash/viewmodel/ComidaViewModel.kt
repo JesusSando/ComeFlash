@@ -1,4 +1,41 @@
 package com.example.comeflash.viewmodel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.comeflash.data.model.Comida
+import com.example.comeflash.data.repository.ComidaRepository
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+class ComidaViewModel (private val repo: ComidaRepository) : ViewModel() {
 
-class ComidaViewModel {
+    val comidas: StateFlow<List<Comida>> =
+        repo.getAllComidas().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    private val _mensaje = MutableStateFlow<String?>(null)
+    val mensaje: StateFlow<String?> = _mensaje
+
+    fun agregar(nombre: String, descripcion: String, precio: Double, tipoComida: String, oferta: Boolean) =
+        viewModelScope.launch {
+            try {
+                repo.insertarComida(
+                    Comida(
+                        nombre = nombre,
+                        descripcion = descripcion,
+                        precio = precio,
+                        tipoComida = tipoComida,
+                        oferta = oferta
+                    )
+                )
+                _mensaje.value = "Comida agregada correctamente"
+            } catch (e: Exception) {
+                _mensaje.value = e.message
+            }
+        }
+
+    fun eliminar(comida: Comida) = viewModelScope.launch {
+        repo.insertarComida(comida)
+    }
+
+    fun actualizar(comida: Comida) = viewModelScope.launch {
+        repo.actualizarComida(comida)
+    }
 }

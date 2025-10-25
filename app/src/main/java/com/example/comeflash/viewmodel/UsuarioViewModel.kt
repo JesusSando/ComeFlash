@@ -1,4 +1,53 @@
 package com.example.comeflash.viewmodel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.comeflash.data.model.Usuario
+import com.example.comeflash.data.repository.UsuarioRepository
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+class UsuarioViewModel (private val repo: UsuarioRepository) : ViewModel() {
 
-class UsuarioViewModel {
+
+    val usuarios: StateFlow<List<Usuario>> =
+        repo.getAllUsuarios()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+
+    private val _usuarioActual = MutableStateFlow<Usuario?>(null)
+    val usuarioActual: StateFlow<Usuario?> = _usuarioActual
+
+    fun registrar(nombre: String, correo: String, contraseña: String) = viewModelScope.launch {
+        repo.registrarUsuario(
+            Usuario(
+                nombre = nombre,
+                correo = correo,
+                contraseña = contraseña,
+                tipoUsuario = "cliente",
+                logoUri = "default_user.png"
+            )
+        )
+    }
+
+    fun iniciarSesion(correo: String, contraseña: String) = viewModelScope.launch {
+        val usuario = repo.getUsuarioPorCorreo(correo)
+        if (usuario != null && usuario.contraseña == contraseña) {
+            _usuarioActual.value = usuario
+        } else {
+            _usuarioActual.value = null
+        }
+    }
+
+    fun cerrarSesion() {
+        _usuarioActual.value = null
+    }
+
+    fun cargarUsuarioPorId(id: Int) = viewModelScope.launch {
+        val usuario = repo.getUsuarioById(id)
+        _usuarioActual.value = usuario
+    }
+
+    fun actualizarUsuario(usuario: Usuario) = viewModelScope.launch {
+        repo.actualizarUsuario(usuario)
+        _usuarioActual.value = usuario
+    }
 }
