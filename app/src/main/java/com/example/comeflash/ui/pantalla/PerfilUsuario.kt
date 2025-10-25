@@ -203,7 +203,7 @@ fun PerfilPantalla(
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
                 ) {
-                    Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar sesión", tint = Color.Red)
+                    Icon(Icons.Default.Edit, contentDescription = "Cerrar sesión", tint = Color.Red)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Cerrar sesión",
