@@ -1,13 +1,21 @@
 package com.example.comeflash.viewmodel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.comeflash.data.database.AppDatabase
 import com.example.comeflash.data.model.Usuario
 import com.example.comeflash.data.repository.UsuarioRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-class UsuarioViewModel (private val repo: UsuarioRepository) : ViewModel() {
+class UsuarioViewModel (application: Application) : AndroidViewModel(application) {
 
+    private val repo: UsuarioRepository
 
+    init {
+        val dao = AppDatabase.get(application).usuarioDao()
+        repo = UsuarioRepository(dao)
+    }
     val usuarios: StateFlow<List<Usuario>> =
         repo.getAllUsuarios()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
