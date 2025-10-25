@@ -44,7 +44,7 @@ navController: NavController
     // Si el usuario inicia sesión correctamente
     LaunchedEffect(usuarioActual) {
         if (usuarioActual != null) {
-            navController.navigate("perfilUsuario") {
+            navController.navigate("main") {
                 popUpTo("login") { inclusive = true }
             }
         }
