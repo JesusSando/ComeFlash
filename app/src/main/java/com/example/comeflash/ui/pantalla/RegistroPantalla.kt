@@ -182,6 +182,38 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                     cursorColor = Color(0xFFFF9800)
                 ),
             )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    if (contraseña != confirmarContraseña) {
+                        confirmarError = "Las contraseñas no coinciden"
+                    } else if (nombre.isBlank() || correo.isBlank() || contraseña.isBlank()) {
+                        confirmarError = "Completa todos los campos"
+                    } else {
+                        confirmarError = null
+                        scope.launch {
+                            viewModel.registrar(nombre, correo, contraseña)
+                            navController.navigate("login") {
+                                popUpTo("registro") { inclusive = true }
+                            }
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .shadow(4.dp, RoundedCornerShape(25.dp)),
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
+            ) {
+                Text(
+                    "Registrarse",
+                    color = Color.Black,
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                )
+            }
+
 
             Spacer(modifier = Modifier.height(20.dp))
 

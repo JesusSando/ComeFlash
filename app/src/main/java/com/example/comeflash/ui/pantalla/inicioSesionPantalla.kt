@@ -151,7 +151,7 @@ navController: NavController
 
             Spacer(Modifier.height(20.dp))
 
-            TextButton(onClick = { navController.navigate("register") }) {
+            TextButton(onClick = { navController.navigate("registro") }) {
                 Text("¿No tienes cuenta? Regístrate", color = Color(0xFF00E676))
             }
         }
