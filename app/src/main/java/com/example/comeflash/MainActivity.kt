@@ -3,54 +3,43 @@ package com.example.comeflash
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-
-import com.example.comeflash.ui.theme.ComeFlashTheme
+import androidx.compose.runtime.*
+import androidx.navigation.compose.*
+import com.example.comeflash.ui.pantalla.NavbarPrincipal
+import com.example.comeflash.ui.pantalla.inicioSesionPantalla
+import com.example.comeflash.ui.screen.*
+import com.example.comeflash.viewmodel.UsuarioViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComeFlashTheme {
-                Surface (
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ){
-
-                }
-            }
+            ComeFlashApp()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Box(
+fun ComeFlashApp() {
+    val navController = rememberNavController()
+    val usuarioViewModel: UsuarioViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Text("bienvenido a ComeFlash",fontSize=24.sp)
+    NavHost(
+        navController = navController,
+        startDestination = "login"
+    ) {
+        composable("login") {
+            inicioSesionPantalla(usuarioViewModel, navController)
+        }
+        composable("registro") {
+            RegistroPantalla(usuarioViewModel, navController)
+        }
+        composable("main") {
+            NavbarPrincipal(usuarioViewModel, navController)
+        }
     }
+
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComeFlashTheme {
-        Greeting("Android")
-    }
-}
+
+

@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @Composable
-fun PantallaCarrito( ) {
+fun PantallaCarrito(rootNavController: NavController, viewModel: UsuarioViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),

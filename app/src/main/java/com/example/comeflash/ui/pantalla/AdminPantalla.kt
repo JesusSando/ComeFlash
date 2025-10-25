@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.comeflash.R
+import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @Composable
-fun AdminPantalla(navController: NavController) {
+fun AdminPantalla(navController: NavController, viewModel: UsuarioViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()

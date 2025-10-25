@@ -27,6 +27,7 @@ fun navbar(
     viewModel: UsuarioViewModel
 ) {
     val usuario by viewModel.usuarioActual.collectAsState()
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
@@ -37,7 +38,7 @@ fun navbar(
         NavItem("Nosotros", "nosotros", Icons.Default.Info),
         NavItem("Perfil", "perfil", Icons.Default.Person)
     )
-    // Si el usuario es admin, agregamos su panel
+
     if (usuario?.tipoUsuario == "admin") {
         items.add(NavItem("Admin", "admin", Icons.Default.Settings))
     }
@@ -47,9 +48,11 @@ fun navbar(
             NavigationBarItem(
                 selected = currentDestination == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo("main") { inclusive = false }
-                        launchSingleTop = true
+                    if (currentDestination != item.route) {
+                        navController.navigate(item.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = { Icon(item.icon, contentDescription = item.label) },
@@ -59,12 +62,12 @@ fun navbar(
     }
 }
 
+
 data class NavItem(
     val label: String,
     val route: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
-
 @Composable
 fun NavbarPrincipal(
     viewModel: UsuarioViewModel,
@@ -73,21 +76,21 @@ fun NavbarPrincipal(
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = {
-            navbar(navController, viewModel)
-        }
+        bottomBar = { navbar(navController, viewModel) }
     ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = "inicio",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("inicio") {PerfilPantalla(rootNavController, viewModel) }
-            composable("carrito") { PerfilPantalla(rootNavController, viewModel) }
-            composable("productos") {PerfilPantalla(rootNavController, viewModel) }
-            composable("nosotros") { PerfilPantalla(rootNavController, viewModel) }
+            composable("inicio") { PerfilPantalla(rootNavController, viewModel) }
+            composable("carrito") { PantallaCarrito(rootNavController, viewModel) }
+
+            composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
-            composable("admin") { PerfilPantalla(rootNavController, viewModel) }
+
+            // Solo visible si es admin
+            composable("admin") { AdminPantalla(rootNavController, viewModel) }
         }
     }
 }
