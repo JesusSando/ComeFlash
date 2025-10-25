@@ -10,12 +10,17 @@ import com.example.comeflash.ui.pantalla.inicioSesionPantalla
 import com.example.comeflash.ui.screen.*
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
+import com.example.comeflash.data.database.CreacionUsuarios
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CreacionUsuarios(this)
         setContent {
             ComeFlashApp()
         }
+
     }
 }
 
