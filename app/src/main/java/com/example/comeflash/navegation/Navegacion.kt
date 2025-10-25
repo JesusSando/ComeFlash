@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.comeflash.ui.screen.LoginScreen
-import com.example.comeflash.ui.screen.RegisterScreen
+import com.example.comeflash.ui.pantalla.NosotrosScreen
+import com.example.comeflash.ui.pantalla.PerfilPantalla
+import com.example.comeflash.ui.pantalla.RegistroScreen
+import com.example.comeflash.ui.screen.LoginPantalla
 
 
 @Composable
@@ -19,10 +21,16 @@ fun NavPag(navController: NavHostController) {
         startDestination = "login"
     ) {
         composable("login") {
-            LoginScreen(navController = navController)
+            LoginPantalla(navController = navController)
         }
         composable("register") {
-            RegisterScreen(navController = navController)
+            RegistroScreen(navController = navController)
+        }
+        composable ( route="perfil") {
+            PerfilPantalla(navController=navController)
+        }
+        composable (route="nosotros") {
+            NosotrosScreen(navController=navController)
         }
     }
 

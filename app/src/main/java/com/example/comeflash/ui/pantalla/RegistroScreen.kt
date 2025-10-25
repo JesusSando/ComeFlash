@@ -1,4 +1,4 @@
-package com.example.comeflash.ui.screen
+package com.example.comeflash.ui.pantalla
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +30,7 @@ import com.example.comeflash.R
 import com.example.comeflash.viewmodel.AuthViewModel
 import androidx.compose.material.icons.filled.FavoriteBorder
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel = viewModel(), navController: NavController) {
+fun RegistroScreen(viewModel: AuthViewModel = viewModel(), navController: NavController) {
     val usuario by viewModel.usuario
     val correoError by viewModel.correoError
     val contraseñaError by viewModel.contraseñaError

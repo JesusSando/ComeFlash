@@ -31,7 +31,7 @@ import com.example.comeflash.viewmodel.AuthViewModel
 import kotlin.text.isNotBlank
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavController) {
+fun LoginPantalla(viewModel: AuthViewModel = viewModel(), navController: NavController) {
     val usuario by viewModel.usuario
     val correoError by viewModel.correoError
     val contraseñaError by viewModel.contraseñaError
@@ -183,6 +183,19 @@ fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavContro
                     fontSize = 14.sp
                 )
             }
-        }
+            TextButton(onClick = { navController.navigate("perfil") }) {
+                Text(
+                    text = "perfil",
+                    color = Color(0xFF00E676),
+                    fontSize = 14.sp
+                )
+            }
+            TextButton(onClick = { navController.navigate("nosotros") }) {
+                Text(
+                    text = "nosotros",
+                    color = Color(0xFF00E676),
+                    fontSize = 14.sp
+                )
+            }}
     }
 }
