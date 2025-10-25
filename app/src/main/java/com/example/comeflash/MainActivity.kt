@@ -1,3 +1,4 @@
+package com.example.comeflash
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,11 +19,9 @@ import androidx.compose.ui.unit.sp
 import com.example.comeflash.ui.pantalla.PantallaPrincipal
 import com.example.comeflash.ui.theme.ComeFlashTheme
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             ComeFlashTheme {
                 Surface (
@@ -36,6 +35,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Box(
 
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+        Text("bienvenido a ComeFlash",fontSize=24.sp)
+    }
+}
 
-
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    ComeFlashTheme {
+        Greeting("Android")
+    }
+}
