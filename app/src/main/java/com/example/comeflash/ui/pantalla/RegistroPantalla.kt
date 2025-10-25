@@ -183,10 +183,13 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                 ),
             )
 
+            Spacer(modifier = Modifier.height(20.dp))
 
-// falta terminar
-
-
+            // ¿Ya tienes cuenta?
+            TextButton(onClick = { navController.navigate("login") } )
+            {
+                Text("¿Ya tienes cuenta? Ingresa aqui para inciciar sesion")
+            }
         }
     }
 }
