@@ -17,21 +17,15 @@ fun CreacionUsuarios(context: Context) {
         val usuariosExistentes = usuarioDao.getAllUsuarios().firstOrNull() ?: emptyList()
 
         if (usuariosExistentes.isEmpty()) {
-            usuarioDao.insertUsuario(
+            usuarioDao.insertar(
                 Usuario(
-                    nombre = "Admin Ejemplo",
+                    nombre = "Admindeejemplo",
                     correo = "admin@comeflash.com",
                     contraseña = "admin123",
                     tipoUsuario = "admin",
                     logoUri = "default_user.png"
                 )
             )
-
-
-
-            println("Usuario agregado")
-        } else {
-            println("usuario ya esta creado")
         }
     }
 }

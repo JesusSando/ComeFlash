@@ -32,8 +32,10 @@ fun navbar(
     )
 
     if (usuario?.tipoUsuario == "admin") {
-        items.add(NavItem("Admin", "admin", Icons.Default.Settings))
+        items.add(NavItem("Admin comida", "AdminComida", Icons.Default.Settings))
+        items.add(NavItem("Admin usuarios", "AdminUsuarios", Icons.Default.Settings))
     }
+
 
     NavigationBar {
         items.forEach { item ->
@@ -98,7 +100,15 @@ fun NavbarPrincipal(
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
-            composable("admin") { AdminPantalla(rootNavController, viewModel) }
+
+            composable("adminComida") {
+                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+                AdminComida(navController, comidaViewModel)
+            }
+
+            composable("adminUsuarios") {
+                AdminUsuarios(navController, viewModel)
+            }
 
 
 

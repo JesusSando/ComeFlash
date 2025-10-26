@@ -9,9 +9,12 @@ class UsuarioRepository(private val dao: usuarioDao) {
 
     suspend fun getUsuarioPorCorreo(correo: String): Usuario? = dao.getUsuarioPorCorreo(correo)
 
-    suspend fun registrarUsuario(usuario: Usuario) = dao.insertUsuario(usuario)
 
     suspend fun actualizarUsuario(usuario: Usuario) = dao.updateUsuario(usuario)
 
     suspend fun eliminarUsuario(usuario: Usuario) = dao.deleteUsuario(usuario)
+
+    suspend fun insertarUsuario(usuario: Usuario) {
+        dao.insertar(usuario)
+    }
 }

@@ -15,12 +15,16 @@ interface usuarioDao {
     @Query("SELECT * FROM usuarios WHERE id = :id LIMIT 1")
     suspend fun getUsuarioById(id: Int): Usuario?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUsuario(usuario: Usuario)
+
 
     @Update
     suspend fun updateUsuario(usuario: Usuario)
 
     @Delete
     suspend fun deleteUsuario(usuario: Usuario)
+
+    @Insert
+    suspend fun insertar(usuario: Usuario)
+
+
 }

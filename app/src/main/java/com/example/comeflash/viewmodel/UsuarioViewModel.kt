@@ -24,16 +24,30 @@ class UsuarioViewModel (application: Application) : AndroidViewModel(application
     private val _usuarioActual = MutableStateFlow<Usuario?>(null)
     val usuarioActual: StateFlow<Usuario?> = _usuarioActual
 
-    fun registrar(nombre: String, correo: String, contraseña: String) = viewModelScope.launch {
-        repo.registrarUsuario(
-            Usuario(
-                nombre = nombre,
-                correo = correo,
-                contraseña = contraseña,
-                tipoUsuario = "cliente",
-                logoUri = "default_user.png"
-            )
-        )
+    fun insertarUsuario(usuario: Usuario) {
+        viewModelScope.launch {
+            repo.insertarUsuario(usuario)
+        }
+    }
+
+
+    fun registrar(nombre: String, correo: String, contraseña: String, tipoUsuario: String = "cliente") {
+        viewModelScope.launch {
+
+            if (nombre.isNotBlank() && correo.isNotBlank() && contraseña.isNotBlank()) {
+                val usuario = Usuario(
+                    nombre = nombre,
+                    correo = correo,
+                    contraseña = contraseña,
+                    tipoUsuario = tipoUsuario
+                )
+
+
+                repo.insertarUsuario(usuario)
+            } else {
+
+            }
+        }
     }
 
     fun iniciarSesion(correo: String, contraseña: String) = viewModelScope.launch {
@@ -54,8 +68,15 @@ class UsuarioViewModel (application: Application) : AndroidViewModel(application
         _usuarioActual.value = usuario
     }
 
-    fun actualizarUsuario(usuario: Usuario) = viewModelScope.launch {
-        repo.actualizarUsuario(usuario)
-        _usuarioActual.value = usuario
+    fun actualizarUsuario(usuario: Usuario) {
+        viewModelScope.launch {
+            repo.actualizarUsuario(usuario)
+        }
+    }
+
+    fun eliminarUsuario(usuario: Usuario) {
+        viewModelScope.launch {
+            repo.eliminarUsuario(usuario)
+        }
     }
 }
