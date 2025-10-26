@@ -36,13 +36,15 @@ import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.comeflash.data.database.CreacionComida
 import com.example.comeflash.viewmodel.CarritoViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProductosPantalla (
-    navController: NavController,
+    navController: NavHostController,
+    rootNavController: NavHostController,
     comidaViewModel: ComidaViewModel,
     carritoViewModel: CarritoViewModel
 ) {
@@ -101,7 +103,7 @@ fun ProductosPantalla (
 
                 ComidaCarta(
                     comida = comida,
-                    onVer = { navController.navigate("detalleProducto/${comida.id}") },
+                    onVer = { rootNavController.navigate("detalleProducto/${comida.id}") },
                     onAgregar = { carritoViewModel.agregar(comida) },
                     isOferta = true
                 )
@@ -133,7 +135,7 @@ fun ProductosPantalla (
                 ComidaCarta(
                     comida = comida,
                     onVer = { navController.navigate("detalleProducto/${comida.id}") },
-                    onAgregar = { /* agregar al carrito */ }
+                    onAgregar = { carritoViewModel.agregar(comida) }
                 )
             }
         }

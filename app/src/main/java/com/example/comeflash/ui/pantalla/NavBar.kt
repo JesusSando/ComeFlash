@@ -7,7 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navArgument
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 import com.example.comeflash.viewmodel.CarritoViewModel
@@ -75,12 +78,15 @@ fun NavbarPrincipal(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("inicio") {
+                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
                 ProductosPantalla(
-                    navController = rootNavController,
+                    navController = navController,
+                    rootNavController = rootNavController as NavHostController,
                     comidaViewModel = comidaViewModel,
                     carritoViewModel = carritoViewModel
                 )
             }
+
 
             composable("carrito") {
                 PantallaCarrito(
@@ -93,6 +99,27 @@ fun NavbarPrincipal(
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
             composable("admin") { AdminPantalla(rootNavController, viewModel) }
+
+
+
+            composable(
+                "detalleProducto/{id}",
+                listOf(navArgument("id") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("id")
+                val comidaViewModel: ComidaViewModel =
+                    androidx.lifecycle.viewmodel.compose.viewModel()
+
+                id?.let {
+                    DetalleProductoPantalla(
+                        navController = navController,
+                        comidaViewModel = comidaViewModel,
+                        comidaId = it
+                    )
+                }
+            }
+
+
         }
     }
 }

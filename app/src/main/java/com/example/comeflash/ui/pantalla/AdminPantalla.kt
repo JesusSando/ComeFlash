@@ -21,7 +21,7 @@ import com.example.comeflash.R
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @Composable
-fun AdminPantalla(navController: NavController, viewModel: UsuarioViewModel) {
+fun AdminPantalla(rootNavController: NavController, viewModel: UsuarioViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +71,11 @@ fun AdminPantalla(navController: NavController, viewModel: UsuarioViewModel) {
                     Text("Gestión de Productos", color = Color(0xFFFF9800), fontSize = 20.sp)
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(
-                        onClick = { /* debe ir a la pantalla de prouctos */ },
+                        onClick = { rootNavController.navigate("adComida")
+
+
+
+                },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
                     ) {
                         Text("Ver Productos", color = Color.Black)
@@ -106,7 +110,7 @@ fun AdminPantalla(navController: NavController, viewModel: UsuarioViewModel) {
 
             // Botón volver
             Button(
-                onClick = { navController.popBackStack() },
+                onClick = { rootNavController.popBackStack() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                 shape = RoundedCornerShape(25.dp),
                 modifier = Modifier
