@@ -10,9 +10,9 @@ class ComidaRepository(private val dao: comidaDao) {
 
     fun getComidasPorTipo(tipo: String): Flow<List<Comida>> = dao.getComidasPorTipo(tipo)
 
-    suspend fun insertarComida(comida: Comida) = dao.insertComida(comida)
+    suspend fun insertarComida(comida: Comida) = dao.insertaComida(comida)
 
-    suspend fun actualizarComida(comida: Comida) = dao.updateComida(comida)
+    suspend fun actualizarComida(comida: Comida) = dao.actualozarComida(comida)
 
-    suspend fun eliminarComida(comida: Comida) = dao.deleteComida(comida)
+    suspend fun eliminarComida(comida: Comida) = dao.eliminarComida(comida)
 }

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 import androidx.navigation.compose.*
+import com.example.comeflash.data.database.CreacionComida
 import com.example.comeflash.ui.pantalla.NavbarPrincipal
 import com.example.comeflash.ui.pantalla.inicioSesionPantalla
 import com.example.comeflash.ui.screen.*
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CreacionUsuarios(this)
+        CreacionComida(this)
         setContent {
             ComeFlashApp()
         }

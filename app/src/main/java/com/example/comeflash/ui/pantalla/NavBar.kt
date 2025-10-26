@@ -19,6 +19,7 @@ import androidx.navigation.compose.*
 import androidx.compose.material.icons.filled.*
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @Composable
@@ -34,7 +35,6 @@ fun navbar(
     val items = mutableListOf(
         NavItem("Inicio", "inicio", Icons.Default.Home),
         NavItem("Carrito", "carrito", Icons.Default.ShoppingCart),
-        NavItem("Productos", "productos", Icons.Default.AddCircle),
         NavItem("Nosotros", "nosotros", Icons.Default.Info),
         NavItem("Perfil", "perfil", Icons.Default.Person)
     )
@@ -71,7 +71,7 @@ data class NavItem(
 @Composable
 fun NavbarPrincipal(
     viewModel: UsuarioViewModel,
-    rootNavController: NavController // Nav principal
+    rootNavController: NavController
 ) {
     val navController = rememberNavController()
 
@@ -83,13 +83,15 @@ fun NavbarPrincipal(
             startDestination = "inicio",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("inicio") { PerfilPantalla(rootNavController, viewModel) }
+            composable("inicio") {
+                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+                ProductosPantalla(rootNavController, comidaViewModel) }
             composable("carrito") { PantallaCarrito(rootNavController, viewModel) }
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
 
-            // Solo visible si es admin
+
             composable("admin") { AdminPantalla(rootNavController, viewModel) }
         }
     }

@@ -27,15 +27,7 @@ fun CreacionUsuarios(context: Context) {
                 )
             )
 
-            usuarioDao.insertUsuario(
-                Usuario(
-                    nombre = "Cliente Ejemplo",
-                    correo = "cliente@comeflash.com",
-                    contraseña = "cliente123",
-                    tipoUsuario = "cliente",
-                    logoUri = "default_user.png"
-                )
-            )
+
 
             println("Usuario agregado")
         } else {

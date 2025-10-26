@@ -14,11 +14,14 @@ interface comidaDao {
     fun getOfertas(): Flow<List<Comida>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertComida(comida: Comida)
+    suspend fun insertaComida(comida: Comida)
 
     @Update
-    suspend fun updateComida(comida: Comida)
+    suspend fun actualozarComida(comida: Comida)
 
     @Delete
-    suspend fun deleteComida(comida: Comida)
+    suspend fun eliminarComida(comida: Comida)
+
+
+
 }
