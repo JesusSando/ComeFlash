@@ -37,12 +37,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.comeflash.data.database.CreacionComida
+import com.example.comeflash.viewmodel.CarritoViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProductosPantalla (
     navController: NavController,
-    comidaViewModel: ComidaViewModel
+    comidaViewModel: ComidaViewModel,
+    carritoViewModel: CarritoViewModel
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -100,7 +102,7 @@ fun ProductosPantalla (
                 ComidaCarta(
                     comida = comida,
                     onVer = { navController.navigate("detalleProducto/${comida.id}") },
-                    onAgregar = { /* agregar al carrito */ },
+                    onAgregar = { carritoViewModel.agregar(comida) },
                     isOferta = true
                 )
             }

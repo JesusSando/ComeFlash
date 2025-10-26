@@ -1,26 +1,16 @@
 package com.example.comeflash.ui.pantalla
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.runtime.*
-import androidx.navigation.compose.*
 import androidx.compose.material.icons.filled.*
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.*
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
+import com.example.comeflash.viewmodel.CarritoViewModel
 
 @Composable
 fun navbar(
@@ -28,7 +18,6 @@ fun navbar(
     viewModel: UsuarioViewModel
 ) {
     val usuario by viewModel.usuarioActual.collectAsState()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
@@ -62,12 +51,12 @@ fun navbar(
     }
 }
 
-
 data class NavItem(
     val label: String,
     val route: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
+
 @Composable
 fun NavbarPrincipal(
     viewModel: UsuarioViewModel,
@@ -75,6 +64,8 @@ fun NavbarPrincipal(
 ) {
     val navController = rememberNavController()
 
+    val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    val carritoViewModel: CarritoViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     Scaffold(
         bottomBar = { navbar(navController, viewModel) }
     ) { innerPadding ->
@@ -84,14 +75,23 @@ fun NavbarPrincipal(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("inicio") {
-                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-                ProductosPantalla(rootNavController, comidaViewModel) }
-            composable("carrito") { PantallaCarrito(rootNavController, viewModel) }
+                ProductosPantalla(
+                    navController = rootNavController,
+                    comidaViewModel = comidaViewModel,
+                    carritoViewModel = carritoViewModel
+                )
+            }
+
+            composable("carrito") {
+                PantallaCarrito(
+                    navController = rootNavController,
+                    viewModel = viewModel,
+                    carritoViewModel = carritoViewModel
+                )
+            }
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
-
-
             composable("admin") { AdminPantalla(rootNavController, viewModel) }
         }
     }
