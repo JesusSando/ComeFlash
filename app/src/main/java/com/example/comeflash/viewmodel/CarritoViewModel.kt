@@ -9,7 +9,6 @@ data class ItemCarrito(
     val comida: Comida,
     val cantidad: Int
 )
-
 class CarritoViewModel : ViewModel() {
     private val _items = MutableStateFlow<List<ItemCarrito>>(emptyList())
     val items: StateFlow<List<ItemCarrito>> = _items

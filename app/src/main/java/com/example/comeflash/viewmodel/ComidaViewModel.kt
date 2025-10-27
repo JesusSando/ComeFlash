@@ -1,14 +1,11 @@
 package com.example.comeflash.viewmodel
 import android.app.Application
-import androidx.compose.foundation.layout.FlowRow
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.comeflash.R
 import com.example.comeflash.data.database.AppDatabase
 import com.example.comeflash.data.model.Comida
-import com.example.comeflash.data.model.Usuario
 import com.example.comeflash.data.repository.ComidaRepository
-import com.example.comeflash.data.repository.UsuarioRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -46,7 +43,8 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
                         descripcion = descripcion,
                         precio = precio,
                         tipoComida = tipoComida,
-                        oferta = oferta
+                        oferta = oferta,
+                        imagenResId = R.drawable.logo
                     )
                 )
                 _mensaje.value = "Comida agregada correctamente"

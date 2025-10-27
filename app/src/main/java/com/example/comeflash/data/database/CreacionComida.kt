@@ -4,6 +4,7 @@ package com.example.comeflash.data.database
 
 
 import android.content.Context
+import com.example.comeflash.R
 import com.example.comeflash.data.model.Comida
 
 import kotlinx.coroutines.CoroutineScope
@@ -22,49 +23,49 @@ fun CreacionComida(context: Context) {
         if (ComidaExistente.isEmpty()) {
           comidaDao.insertaComida(
               Comida(
-                  nombre = "hamburguesa simple",
-                  descripcion = "la mejor hamburguesa simple",
+                  nombre = "Hamburguesa simple",
+                  descripcion = "La mejor hamburguesa simple",
                   precio = 4000.0,
                   tipoComida = "Hamburguesa",
-                  imagenUri = "default_user.png"
+                  imagenResId = R.drawable.hamburguesa_simple
               )
           )
             comidaDao.insertaComida(
               Comida(
-                  nombre = "hamburguesa de queso",
-                  descripcion = "la mejor hamburguesa con doble queso",
+                  nombre = "Hamburguesa de queso",
+                  descripcion = "La mejor hamburguesa con doble queso",
                   precio = 5000.0,
                   tipoComida = "Hamburguesa",
-                  imagenUri = "default_user.png"
+                  imagenResId = R.drawable.hamburguesa_queso
               )
             )
             comidaDao.insertaComida(
               Comida(
-                  nombre = "pizza chica",
-                  descripcion = "la mejor pizza chica",
+                  nombre = "Pizza chica",
+                  descripcion = "La mejor pizza chica",
                   precio = 8900.0,
                   precioOferta = 6900.0,
                   oferta = true,
                   tipoComida = "Pizza",
-                  imagenUri = "default_user.png"
+                  imagenResId = R.drawable.pizza_chica
               )
             )
             comidaDao.insertaComida(
               Comida(
-                  nombre = "papas fritas",
-                  descripcion = "las mejores papas fritas",
+                  nombre = "Papas fritas",
+                  descripcion = "Las mejores papas fritas",
                   precio = 2500.0,
                   tipoComida = "Acompañamiento",
-                  imagenUri = "default_user.png"
+                  imagenResId = R.drawable.papas_fritas
               )
             )
             comidaDao.insertaComida(
               Comida(
-                  nombre = "bebida pepsi",
-                  descripcion = "la mejor bebida pepsi",
+                  nombre = "Bebida pepsi",
+                  descripcion = "Ña mejor bebida pepsi",
                   precio = 1500.0,
                   tipoComida = "Acompañamiento",
-                  imagenUri = "default_user.png"
+                  imagenResId = R.drawable.bebida_pepsi
               )
             )
 

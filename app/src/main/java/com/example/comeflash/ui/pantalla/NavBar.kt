@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
+import com.example.comeflash.ui.screen.RegistroPantalla
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 import com.example.comeflash.viewmodel.CarritoViewModel
@@ -127,6 +128,9 @@ fun NavbarPrincipal(
                         comidaId = it
                     )
                 }
+            }
+            composable("registro") {
+                RegistroPantalla(viewModel = viewModel, navController = navController)
             }
 
 

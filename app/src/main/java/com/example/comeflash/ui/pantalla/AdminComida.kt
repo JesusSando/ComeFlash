@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.material3.Button
@@ -31,11 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-
-
 import com.example.comeflash.data.model.Comida
 import com.example.comeflash.viewmodel.ComidaViewModel
-
 import com.example.comeflash.R
 
 @Composable
@@ -71,7 +67,7 @@ fun AdminComida(
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre") },
+                label = { Text("Nombre", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
@@ -79,7 +75,7 @@ fun AdminComida(
             OutlinedTextField(
                 value = descripcion,
                 onValueChange = { descripcion = it },
-                label = { Text("Descripción") },
+                label = { Text("Descripción", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -100,7 +96,7 @@ fun AdminComida(
                 OutlinedTextField(
                     value = precio,
                     onValueChange = { precio = it },
-                    label = { Text("Precio") },
+                    label = { Text("Precio", color = Color.White) },
                     modifier = Modifier.weight(1f),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFFFF9800),
@@ -115,7 +111,7 @@ fun AdminComida(
                 OutlinedTextField(
                     value = precioOferta,
                     onValueChange = { precioOferta = it },
-                    label = { Text("Precio Oferta") },
+                    label = { Text("Precio Oferta", color = Color.White) },
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -138,7 +134,7 @@ fun AdminComida(
             OutlinedTextField(
                 value = tipo,
                 onValueChange = { tipo = it },
-                label = { Text("Tipo de comida") },
+                label = { Text("Tipo de comida", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -167,7 +163,8 @@ fun AdminComida(
                                 precio = precio.toDouble(),
                                 tipoComida = tipo,
                                 oferta = oferta,
-                                precioOferta = precioOferta.toDoubleOrNull()
+                                precioOferta = precioOferta.toDoubleOrNull(),
+                                imagenResId = R.drawable.logo
                             )
 
                             if (editando) comidaViewModel.actualizar(comida)

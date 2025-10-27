@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-
 import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
@@ -69,7 +68,7 @@ fun AdminUsuarios(
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre") },
+                label = { Text("Nombre", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
@@ -78,14 +77,14 @@ fun AdminUsuarios(
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
-                label = { Text("Correo") },
+                label = { Text("Correo", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 value = contraseña,
                 onValueChange = { contraseña = it },
-                label = { Text("Contraseña") },
+                label = { Text("Contraseña", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
@@ -94,7 +93,7 @@ fun AdminUsuarios(
             OutlinedTextField(
                 value = tipoUsuario,
                 onValueChange = { tipoUsuario = it },
-                label = { Text("Tipo de usuario") },
+                label = { Text("Tipo de usuario", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(12.dp))

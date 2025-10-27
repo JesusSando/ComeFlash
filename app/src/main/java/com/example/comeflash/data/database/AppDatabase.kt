@@ -13,7 +13,7 @@ import com.example.comeflash.data.model.*
         DetalleCompra::class,
         Carta::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -32,7 +32,11 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "PideFlash.db"
-                ).build().also { INSTANCE = it }
+
+                )
+                    .fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
+
             }
     }
 }

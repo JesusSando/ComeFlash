@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 class CartaViewModel (private val repository: CartaRepository) : ViewModel() {
 
-
     val cartItems: StateFlow<List<Carta>> =
         repository.getAllCarta()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

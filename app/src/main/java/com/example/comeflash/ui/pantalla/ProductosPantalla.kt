@@ -1,12 +1,15 @@
 package com.example.comeflash.ui.pantalla
+
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,129 +17,161 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.comeflash.R
-import com.example.comeflash.viewmodel.ComidaViewModel
-import com.example.comeflash.data.model.Comida
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.modifier.modifierLocalOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.comeflash.data.database.CreacionComida
+import com.example.comeflash.data.model.Comida
 import com.example.comeflash.viewmodel.CarritoViewModel
+import com.example.comeflash.viewmodel.ComidaViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ProductosPantalla (
+fun ProductosPantalla(
     navController: NavHostController,
     rootNavController: NavHostController,
     comidaViewModel: ComidaViewModel,
     carritoViewModel: CarritoViewModel
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         CreacionComida(context)
     }
 
-
     val comidas by comidaViewModel.comidas.collectAsState()
-    var ComidaOfertas by remember {  mutableStateOf(listOf<Comida>())}
-
+    var ComidaOfertas by remember { mutableStateOf(listOf<Comida>()) }
     var tipoSeleccionado by remember { mutableStateOf("Todos") }
-    var comidasFiltradas by remember { mutableStateOf(listOf<Comida>()) }
-
-
-
 
     LaunchedEffect(Unit) {
-       comidaViewModel.ofertas().collectLatest {
-           ComidaOfertas=it
-       }
+        comidaViewModel.ofertas().collectLatest { ComidaOfertas = it }
     }
 
-    val comidasFiltrada=remember (comidas,tipoSeleccionado ){
-        if(tipoSeleccionado=="Todos") comidas
-        else comidas.filter { it.tipoComida.equals(tipoSeleccionado,true) }
+    val comidasFiltradas = remember(comidas, tipoSeleccionado) {
+        if (tipoSeleccionado == "Todos") comidas
+        else comidas.filter { it.tipoComida.equals(tipoSeleccionado, true) }
     }
 
-
-
-
-    Column(
-    modifier = Modifier
-    .fillMaxSize()
-    .background(Color(0xFF121212))
-    .padding(8.dp)
-        .verticalScroll(rememberScrollState())
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF121212))
     ) {
-        Text(
-            "Ofertas",
-            color = Color(0xFFFF9800),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 8.dp, top = 8.dp)
-        )
-
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max=600.dp)
-        ){
-            items(ComidaOfertas) { comida ->
-                Box(modifier= Modifier
-                    .width(250.dp)
-                    .padding(horizontal = 8.dp))
+                .fillMaxSize()
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Animacion
+            var visibleOfertas by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) { visibleOfertas = true }
 
-                ComidaCarta(
-                    comida = comida,
-                    onVer = { rootNavController.navigate("detalleProducto/${comida.id}") },
-                    onAgregar = { carritoViewModel.agregar(comida) },
-                    isOferta = true
+            AnimatedVisibility(
+                visible = visibleOfertas,
+                enter = fadeIn(animationSpec = tween(4000)) +
+                        slideInVertically(initialOffsetY = { -50 }),
+            ) {
+                Text(
+                    "Ofertas",
+                    color = Color(0xFFFF9800),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(start = 9.dp, top = 9.dp)
                 )
+            }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 600.dp)
+            ) {
+                items(ComidaOfertas) { comida ->
+                    ComidaCarta(
+                        comida = comida,
+                        onVer = { rootNavController.navigate("detalleProducto/${comida.id}") },
+                        onAgregar = {
+                            scope.launch {
+                                isLoading = true
+                                carritoViewModel.agregar(comida)
+                                delay(800)
+                                isLoading = false
+                            }
+                        },
+                        isOferta = true
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            FiltroComidas(
+                tipoSeleccionado = tipoSeleccionado,
+                onTipoSeleccionado = { tipoSeleccionado = it }
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            // Animacion
+            var visibleMenu by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) {
+                delay(300)
+                visibleMenu = true
+            }
+
+            AnimatedVisibility(
+                visible = visibleMenu,
+                enter = fadeIn(animationSpec = tween(700)) +
+                        slideInVertically(initialOffsetY = { -40 }),
+            ) {
+                Text(
+                    "Menú",
+                    color = Color(0xFFFF9800),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(start = 8.dp, top = 8.dp)
+                )
+            }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 600.dp)
+            ) {
+                items(comidasFiltradas) { comida ->
+                    ComidaCarta(
+                        comida = comida,
+                        onVer = { navController.navigate("detalleProducto/${comida.id}") },
+                        onAgregar = {
+                            scope.launch {
+                                isLoading = true
+                                carritoViewModel.agregar(comida)
+                                delay(800)
+                                isLoading = false
+                            }
+                        }
+                    )
+                }
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        FiltroComidas(
-            tipoSeleccionado = tipoSeleccionado,
-            onTipoSeleccionado = { tipoSeleccionado = it }
-        )
-        Spacer(Modifier.height(16.dp))
-
-
-        Text(
-            "Menu",
-            color = Color(0xFFFF9800),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 8.dp, top = 8.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max=600.dp)
+        AnimatedVisibility(
+            visible = isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            items(comidasFiltrada) { comida ->
-                ComidaCarta(
-                    comida = comida,
-                    onVer = { navController.navigate("detalleProducto/${comida.id}") },
-                    onAgregar = { carritoViewModel.agregar(comida) }
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x80000000)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color(0xFFFF9800), strokeWidth = 5.dp)
             }
         }
     }
@@ -178,7 +213,6 @@ fun ComidaCarta(
 ) {
     Card(
         modifier = Modifier
-
             .padding(vertical = 6.dp)
             .clip(RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
@@ -188,7 +222,7 @@ fun ComidaCarta(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = comida.imagenResId),
                 contentDescription = comida.nombre,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
