@@ -203,9 +203,8 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
             Spacer(modifier = Modifier.height(20.dp))
 
 
-            TextButton(onClick = { navController.navigate("login") } )
-            {
-                Text("¿Ya tienes cuenta? Ingresa aqui para inciciar sesion")
+            TextButton(onClick = { navController.navigate("login") }) {
+                Text("¿Tienes cuenta? Inicia Sesion", color = Color(0xFF00E676))
             }
         }
     }

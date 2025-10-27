@@ -1,7 +1,7 @@
 package com.example.comeflash.ui.pantalla
 
-
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,7 +17,9 @@ import com.example.comeflash.viewmodel.*
 
 @Composable
 fun FormularioPagoPantalla(
-    navController: NavController, carritoViewModel: CarritoViewModel) {
+    navController: NavController,
+    carritoViewModel: CarritoViewModel
+) {
     val items by carritoViewModel.items.collectAsState()
     val total by carritoViewModel.total.collectAsState()
 
@@ -66,22 +68,24 @@ fun FormularioPagoPantalla(
                 errorDireccion = validarNoVacio(it)
             }
             Text(text = errorDireccion, color = Color.Red)
-
             Box {
                 OutlinedTextField(
                     value = metodoPago,
                     onValueChange = {},
-                    label = { Text("Método de pago", color = Color.Gray) },
+                    label = { Text("Método de pago", color = Color.White) },
                     readOnly = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFFFF9800),
-                        focusedLabelColor = Color(0xFFFF9800),
-                        unfocusedBorderColor = Color.Gray,
-                        unfocusedLabelColor = Color.Gray
+                        focusedLabelColor = Color.White,
+                        unfocusedBorderColor = Color.White,
+                        unfocusedLabelColor = Color.White,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color(0xFFFF9800)
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-
+                        .clickable { expanded = true }
                 )
                 DropdownMenu(
                     expanded = expanded,
@@ -98,7 +102,6 @@ fun FormularioPagoPantalla(
                     }
                 }
             }
-
             if (metodoPago.contains("Tarjeta")) {
                 CampoTexto("Número de tarjeta", numeroTarjeta) {
                     numeroTarjeta = it
@@ -124,12 +127,10 @@ fun FormularioPagoPantalla(
             Button(
                 onClick = {
                     if (nombre.isNotBlank() && direccion.isNotBlank() &&
-                        (metodoPago.contains("Efectivo") || (numeroTarjeta.isNotBlank() && fechaExp.isNotBlank() && cvv.isNotBlank() &&
-                                errorTarjeta.isBlank() && errorFechaExp.isBlank() && errorCvv.isBlank()))
+                        (metodoPago.contains("Efectivo") ||
+                                (numeroTarjeta.isNotBlank() && fechaExp.isNotBlank() && cvv.isNotBlank() &&
+                                        errorTarjeta.isBlank() && errorFechaExp.isBlank() && errorCvv.isBlank()))
                     ) {
-
-
-
                         navController.navigate("boleta") {
                             popUpTo("carrito") { inclusive = true }
                         }
@@ -138,12 +139,11 @@ fun FormularioPagoPantalla(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp),
-
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
             ) {
                 Text(
                     text = "Confirmar pago",
-                    color = Color.Black,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -157,12 +157,15 @@ fun CampoTexto(label: String, valor: String, onChange: (String) -> Unit) {
     OutlinedTextField(
         value = valor,
         onValueChange = onChange,
-        label = { Text(label, color = Color.Gray) },
+        label = { Text(label, color = Color.White) },
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color(0xFFFF9800),
-            focusedLabelColor = Color(0xFFFF9800),
             unfocusedBorderColor = Color.Gray,
-            unfocusedLabelColor = Color.Gray
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.White,
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White,
+            cursorColor = Color(0xFFFF9800)
         ),
         modifier = Modifier
             .fillMaxWidth()
