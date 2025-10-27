@@ -32,7 +32,7 @@ fun BoletaPantalla(
     if (items.isEmpty()) {
         Text(
             text = "El carrito está vacío",
-            color = Color.White,
+            color = Color.Black,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
@@ -45,7 +45,7 @@ fun BoletaPantalla(
     ) {
         Text(
             text = "Boleta de Compra",
-            color = Color.White,
+            color = Color.Black,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
@@ -54,7 +54,7 @@ fun BoletaPantalla(
 
         Text(
             text = "Total de la compra: $${String.format("%.0f", total)}",
-            color = Color(0xFF000000),
+            color = Color(0xFFFF9800),
             fontSize = 20.sp
         )
 
@@ -69,7 +69,7 @@ fun BoletaPantalla(
                 ) {
                     Text(
                         text = item.comida.nombre,
-                        color = Color.White,
+                        color = Color.Black,
                         fontSize = 16.sp
                     )
                     Text(
@@ -95,7 +95,7 @@ fun BoletaPantalla(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF000000))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
         ) {
             Text(
                 text = "Volver al inicio",
