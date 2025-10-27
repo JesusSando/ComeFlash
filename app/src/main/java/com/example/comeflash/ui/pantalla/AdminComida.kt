@@ -69,6 +69,15 @@ fun AdminComida(
                 onValueChange = { nombre = it },
                 label = { Text("Nombre", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFFF3F3F3),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedLabelColor = Color(0xFFFCFAF8),
+                    cursorColor = Color(0xFFFCF5EC)
+                ),
+
             )
             Spacer(Modifier.height(8.dp))
 
@@ -231,7 +240,7 @@ fun AdminComida(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.logo),
+                        painter = painterResource(comida.imagenResId),
                         contentDescription = comida.nombre,
                         modifier = Modifier
                             .size(64.dp)

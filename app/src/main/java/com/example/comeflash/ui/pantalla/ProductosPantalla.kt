@@ -247,8 +247,13 @@ fun ComidaCarta(
                     Text("Precio: $${comida.precio}", color = Color.White)
                 }
                 Row {
-                    TextButton(onClick = onVer) { Text("Ver producto") }
-                    TextButton(onClick = onAgregar) { Text("Pedir") }
+                    TextButton(onClick = onVer,
+                            colors = ButtonDefaults.textButtonColors(contentColor =Color(0xFFFF9800))  )
+                    { Text("Ver producto") }
+
+                    TextButton(onClick = onAgregar,
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFFFF9800))  )
+                    { Text("Pedir") }
                 }
             }
         }
