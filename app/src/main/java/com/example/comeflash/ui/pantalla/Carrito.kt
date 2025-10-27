@@ -201,8 +201,9 @@ fun PantallaCarrito(
 
                     Button(
                         onClick = {
-                            carritoViewModel.limpiarCarrito()
-                            navController.popBackStack()
+                            navController.navigate("formularioPago") {
+                                popUpTo("carrito") { inclusive = true }
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.8f)

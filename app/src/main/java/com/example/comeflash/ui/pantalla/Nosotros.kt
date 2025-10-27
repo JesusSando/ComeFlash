@@ -49,7 +49,7 @@ fun NosotrosScreen(navController: NavController, viewModel: UsuarioViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // flecha volver y logo
+            // flecha volver
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +73,7 @@ fun NosotrosScreen(navController: NavController, viewModel: UsuarioViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Título nosotros
+            // Titulo nosotros
             Text(
                 text = "Nosotros",
                 color = Color(0xFFFF9800),
@@ -85,7 +85,7 @@ fun NosotrosScreen(navController: NavController, viewModel: UsuarioViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Imagen
+            // logo de nosotros
             Image(
                 painter = painterResource(id = R.drawable.nosotros),
                 contentDescription = "nosotros",
@@ -98,7 +98,7 @@ fun NosotrosScreen(navController: NavController, viewModel: UsuarioViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Texto nostros
+
             Text(
                 text = "ComeFlash nació con el propósito de ofrecer comida rápida hecha con pasión, usando ingredientes frescos y locales. Queremos entregar una experiencia única a nuestros clientes con un servicio ágil y cercano.",
                 color = Color.White,

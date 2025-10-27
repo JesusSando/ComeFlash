@@ -56,7 +56,7 @@ fun AdminPantalla(rootNavController: NavController, viewModel: UsuarioViewModel)
                     .padding(16.dp)
             )
 
-            // gestión de productos
+            // gestioon de productos
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +108,7 @@ fun AdminPantalla(rootNavController: NavController, viewModel: UsuarioViewModel)
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botón volver
+            // Botooon volver
             Button(
                 onClick = { rootNavController.popBackStack() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),

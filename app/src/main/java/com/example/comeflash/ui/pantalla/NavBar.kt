@@ -93,10 +93,18 @@ fun NavbarPrincipal(
 
             composable("carrito") {
                 PantallaCarrito(
-                    navController = rootNavController,
+                    navController = navController,
                     viewModel = viewModel,
                     carritoViewModel = carritoViewModel
                 )
+            }
+
+            composable("formularioPago") {
+                FormularioPagoPantalla(navController, carritoViewModel)
+            }
+
+            composable("boleta") {
+                BoletaPantalla(navController = navController, carritoViewModel = carritoViewModel)
             }
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }

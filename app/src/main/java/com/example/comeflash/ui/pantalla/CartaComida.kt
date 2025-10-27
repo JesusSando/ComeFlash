@@ -45,7 +45,7 @@ fun DetalleProductoPantalla(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Imagen del producto
+        // imagen del producto completo
         Image(
             painter = painterResource(id = comida.imagenResId),
             contentDescription = comida.nombre,
