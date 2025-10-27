@@ -95,7 +95,7 @@ fun ProductosPantalla(
                 items(ComidaOfertas) { comida ->
                     ComidaCarta(
                         comida = comida,
-                        onVer = { rootNavController.navigate("detalleProducto/${comida.id}") },
+                        onVer = { navController.navigate("detalleProducto/${comida.id}") },
                         onAgregar = {
                             scope.launch {
                                 isLoading = true

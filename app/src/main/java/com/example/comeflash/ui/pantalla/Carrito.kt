@@ -57,7 +57,7 @@ fun PantallaCarrito(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { navController.navigate("main")}) {
+                IconButton(onClick = { navController.navigate("inicio")}) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Volver",
