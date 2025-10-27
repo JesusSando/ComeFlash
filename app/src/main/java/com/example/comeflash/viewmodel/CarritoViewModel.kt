@@ -1,6 +1,5 @@
 package com.example.comeflash.viewmodel
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -8,47 +7,57 @@ import com.example.comeflash.data.model.Comida
 
 data class ItemCarrito(
     val comida: Comida,
-    var cantidad: Int
+    val cantidad: Int
 )
 
-class CarritoViewModel: ViewModel() {
+class CarritoViewModel : ViewModel() {
     private val _items = MutableStateFlow<List<ItemCarrito>>(emptyList())
     val items: StateFlow<List<ItemCarrito>> = _items
 
-    val total: StateFlow<Double> = MutableStateFlow(0.0)
+    private val _total = MutableStateFlow(0.0)
+    val total: StateFlow<Double> = _total
 
     fun agregar(comida: Comida) {
         val listaActual = _items.value.toMutableList()
-        val existente = listaActual.find { it.comida.id == comida.id }
-        if (existente != null) {
-            existente.cantidad++
+        val index = listaActual.indexOfFirst { it.comida.id == comida.id }
+        if (index >= 0) {
+            val item = listaActual[index]
+            listaActual[index] = item.copy(cantidad = item.cantidad + 1)
         } else {
             listaActual.add(ItemCarrito(comida, 1))
         }
-        _items.value = listaActual
+        _items.value = listaActual.toList()
+        actualizarTotal()
     }
 
     fun eliminar(comida: Comida) {
-        val listaActual = _items.value.toMutableList()
-        listaActual.removeAll { it.comida.id == comida.id }
+        val listaActual = _items.value.filterNot { it.comida.id == comida.id }
         _items.value = listaActual
+        actualizarTotal()
     }
 
     fun actualizarCantidad(comida: Comida, nuevaCantidad: Int) {
         val listaActual = _items.value.toMutableList()
-        val item = listaActual.find { it.comida.id == comida.id }
-        if (item != null) {
-            if (nuevaCantidad <= 0) listaActual.remove(item)
-            else item.cantidad = nuevaCantidad
-            _items.value = listaActual
+        val index = listaActual.indexOfFirst { it.comida.id == comida.id }
+
+        if (index >= 0) {
+            if (nuevaCantidad <= 0) {
+                listaActual.removeAt(index)
+            } else {
+                val item = listaActual[index]
+                listaActual[index] = item.copy(cantidad = nuevaCantidad)
+            }
+            _items.value = listaActual.toList()
+            actualizarTotal()
         }
     }
 
-    fun calcularTotal(): Double {
-        return _items.value.sumOf { it.comida.precio * it.cantidad }
+    private fun actualizarTotal() {
+        _total.value = _items.value.sumOf { it.comida.precio * it.cantidad }
     }
 
     fun limpiarCarrito() {
         _items.value = emptyList()
+        _total.value = 0.0
     }
 }

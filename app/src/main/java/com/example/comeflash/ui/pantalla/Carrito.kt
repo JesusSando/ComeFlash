@@ -9,15 +9,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,14 +32,15 @@ import com.example.comeflash.R
 import com.example.comeflash.viewmodel.CarritoViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
+
 @Composable
 fun PantallaCarrito(
     navController: NavController,
     viewModel: UsuarioViewModel,
     carritoViewModel: CarritoViewModel
 ) {
-    val items = carritoViewModel.items.collectAsState().value
-    val total = carritoViewModel.calcularTotal()
+    val items by carritoViewModel.items.collectAsState()
+    val total by carritoViewModel.total.collectAsState()
 
     Box(
         modifier = Modifier
@@ -50,7 +56,6 @@ fun PantallaCarrito(
                 .fillMaxSize()
                 .padding(20.dp)
         ) {
-            // 🔝 Encabezado
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -90,7 +95,7 @@ fun PantallaCarrito(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "el carrito esta vacío",
+                        text = "El carrito está vacío",
                         color = Color.White,
                         fontSize = 18.sp
                     )
@@ -133,14 +138,23 @@ fun PantallaCarrito(
                                         color = Color(0xFFFF9800),
                                         fontSize = 14.sp
                                     )
+                                    Text(
+                                        text = "Subtotal: $${String.format("%.0f", item.comida.precio * item.cantidad)}",
+                                        color = Color.Gray,
+                                        fontSize = 13.sp
+                                    )
                                 }
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     IconButton(onClick = {
                                         carritoViewModel.actualizarCantidad(item.comida, item.cantidad - 1)
                                     }) {
+                                        Icon(
+                                            imageVector = Icons.Default.KeyboardArrowLeft,
+                                            contentDescription = "Disminuir",
+                                            tint = Color.White
+                                        )
                                     }
-
                                     Text(
                                         text = item.cantidad.toString(),
                                         color = Color.White,
@@ -152,7 +166,7 @@ fun PantallaCarrito(
                                         carritoViewModel.actualizarCantidad(item.comida, item.cantidad + 1)
                                     }) {
                                         Icon(
-                                            imageVector = Icons.Default.Add,
+                                            imageVector = Icons.Default.KeyboardArrowRight,
                                             contentDescription = "Aumentar",
                                             tint = Color.White
                                         )
@@ -180,7 +194,7 @@ fun PantallaCarrito(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Total: $${String.format("%.2f", total)}",
+                        text = "Total: $${String.format("%.0f", total)}",
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold

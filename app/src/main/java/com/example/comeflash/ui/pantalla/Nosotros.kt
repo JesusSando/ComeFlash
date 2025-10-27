@@ -109,39 +109,6 @@ fun NosotrosScreen(navController: NavController, viewModel: UsuarioViewModel) {
                 lineHeight = 22.sp,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            // mapa
-            Text(
-                text = "Nuestra ubicación",
-                color = Color(0xFFFF9800),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(bottom = 12.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                GoogleMap(
-                    modifier = Modifier.matchParentSize(),
-                    cameraPositionState = cameraPositionState
-                ) {
-                    Marker(
-                        state = MarkerState(position = ubicacion),
-                        title = "ComeFlash",
-                        snippet = "Sede Antonio varas"
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
