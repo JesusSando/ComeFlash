@@ -30,17 +30,17 @@ import com.example.comeflash.viewmodel.UsuarioViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun inicioSesionPantalla (viewModel: UsuarioViewModel = viewModel(),
-navController: NavController
+fun inicioSesionPantalla(
+    viewModel: UsuarioViewModel = viewModel(),
+    navController: NavController
 ) {
     var correo by remember { mutableStateOf("") }
     var contraseña by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
 
     val scope = rememberCoroutineScope()
     val usuarioActual by viewModel.usuarioActual.collectAsState()
+    val mensajeInicio by viewModel.mensajeInicioSesion.collectAsState()
 
-    // Si el usuario inicia sesión correctamente
     LaunchedEffect(usuarioActual) {
         if (usuarioActual != null) {
             navController.navigate("main") {
@@ -48,7 +48,6 @@ navController: NavController
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -81,6 +80,7 @@ navController: NavController
                 modifier = Modifier.padding(bottom = 40.dp)
             )
 
+            // correo
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
@@ -97,9 +97,9 @@ navController: NavController
                     cursorColor = Color(0xFFFF9800)
                 ),
             )
-
             Spacer(Modifier.height(16.dp))
 
+            // contraseña
             OutlinedTextField(
                 value = contraseña,
                 onValueChange = { contraseña = it },
@@ -116,22 +116,18 @@ navController: NavController
                     cursorColor = Color(0xFFFF9800)
                 ),
             )
-
-            error?.let {
-                Text(it, color = Color.Red, fontSize = 12.sp)
+            mensajeInicio?.let {
+                val color = if (it.contains("exitoso")) Color.Green else Color.Red
+                Text(it, color = color, fontSize = 13.sp, modifier = Modifier.padding(top = 8.dp))
             }
 
             Spacer(Modifier.height(32.dp))
 
+            // Boton
             Button(
                 onClick = {
                     scope.launch {
                         viewModel.iniciarSesion(correo, contraseña)
-                        if (viewModel.usuarioActual.value == null) {
-                            error = "Credenciales incorrectas"
-                        } else {
-                            error = null
-                        }
                     }
                 },
                 modifier = Modifier

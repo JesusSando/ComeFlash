@@ -30,33 +30,72 @@ class UsuarioViewModel (application: Application) : AndroidViewModel(application
     }
 
 
-    fun registrar(nombre: String, correo: String, contraseña: String, tipoUsuario: String = "cliente") {
-        viewModelScope.launch {
+    private val _mensajeRegistro = MutableStateFlow<String?>(null)
+    val mensajeRegistro: StateFlow<String?> = _mensajeRegistro
 
-            if (nombre.isNotBlank() && correo.isNotBlank() && contraseña.isNotBlank()) {
-                val usuario = Usuario(
-                    nombre = nombre,
-                    correo = correo,
-                    contraseña = contraseña,
-                    tipoUsuario = tipoUsuario
-                )
-
-
-                repo.insertarUsuario(usuario)
-            } else {
-
+    fun registrar(nombre: String, correo: String, contraseña: String, tipoUsuario: String = "cliente") = viewModelScope.launch {
+        when {
+            nombre.isBlank() || correo.isBlank() || contraseña.isBlank() -> {
+                _mensajeRegistro.value = "Completa todos los bloques."
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() -> {
+                _mensajeRegistro.value = "El correo no cumple conm el formato."
+            }
+            contraseña.length < 6 -> {
+                _mensajeRegistro.value = "La contraseña debe tener al menos 6 caracteres."
+            }
+            else -> {
+                val usuarioExistente = repo.getUsuarioPorCorreo(correo)
+                when {
+                    usuarioExistente != null -> {
+                        _mensajeRegistro.value = "Ya existe un usuario con este correo."
+                    }
+                    else -> {
+                        val nuevoUsuario = Usuario(
+                            nombre = nombre,
+                            correo = correo,
+                            contraseña = contraseña,
+                            tipoUsuario = tipoUsuario
+                        )
+                        repo.insertarUsuario(nuevoUsuario)
+                        _mensajeRegistro.value = "Registro exitosa"
+                    }
+                }
             }
         }
     }
 
+    private val _mensajeInicioSesion = MutableStateFlow<String?>(null)
+    val mensajeInicioSesion: StateFlow<String?> = _mensajeInicioSesion
+
     fun iniciarSesion(correo: String, contraseña: String) = viewModelScope.launch {
-        val usuario = repo.getUsuarioPorCorreo(correo)
-        if (usuario != null && usuario.contraseña == contraseña) {
-            _usuarioActual.value = usuario
-        } else {
-            _usuarioActual.value = null
+        when {
+            correo.isBlank() || contraseña.isBlank() -> {
+                _mensajeInicioSesion.value = "Debe ingresar correo y contraseña."
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() -> {
+                _mensajeInicioSesion.value = "El correo no cumple conm el formato."
+            }
+            else -> {
+                val usuario = repo.getUsuarioPorCorreo(correo)
+                when {
+                    usuario == null -> {
+                        _mensajeInicioSesion.value = "No existe una cuenta con este correo."
+                        _usuarioActual.value = null
+                    }
+                    usuario.contraseña != contraseña -> {
+                        _mensajeInicioSesion.value = "Contraseña incorrecta."
+                        _usuarioActual.value = null
+                    }
+                    else -> {
+                        _usuarioActual.value = usuario
+                        _mensajeInicioSesion.value = "Inicio de sesion exitosa "
+                    }
+                }
+            }
         }
     }
+
 
     fun cerrarSesion() {
         _usuarioActual.value = null

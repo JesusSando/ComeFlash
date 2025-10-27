@@ -70,6 +70,10 @@ fun AdminUsuarios(
                 onValueChange = { nombre = it },
                 label = { Text("Nombre", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                )
             )
             Spacer(Modifier.height(8.dp))
 
@@ -79,6 +83,11 @@ fun AdminUsuarios(
                 onValueChange = { correo = it },
                 label = { Text("Correo", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                )
+
             )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
@@ -86,6 +95,10 @@ fun AdminUsuarios(
                 onValueChange = { contraseña = it },
                 label = { Text("Contraseña", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                )
             )
             Spacer(Modifier.height(8.dp))
 
@@ -95,6 +108,10 @@ fun AdminUsuarios(
                 onValueChange = { tipoUsuario = it },
                 label = { Text("Tipo de usuario", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                )
             )
             Spacer(Modifier.height(12.dp))
 
@@ -182,8 +199,8 @@ fun AdminUsuarios(
 
                     Column(Modifier.weight(1f)) {
                         Text(usuario.nombre, color = Color.White)
-                        Text(usuario.correo, color = Color.Gray)
-                        Text(usuario.tipoUsuario, color = Color(0xFFFF9800))
+                        Text(usuario.correo, color = Color.White)
+                        Text(usuario.tipoUsuario, color = Color.White)
                     }
 
                     IconButton(onClick = {
