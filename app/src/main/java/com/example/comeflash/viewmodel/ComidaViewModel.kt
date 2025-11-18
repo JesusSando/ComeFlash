@@ -8,65 +8,70 @@ import com.example.comeflash.data.model.Comida
 import com.example.comeflash.data.repository.ComidaRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
+import com.example.comeflash.data.remote.*
 
 class ComidaViewModel (application: Application) : AndroidViewModel(application) {
-
     private val repo: ComidaRepository
 
-    init {
-        val dao = AppDatabase.get(application).comidaDao()
-        repo = ComidaRepository(dao)
-    }
-    val usuarios: StateFlow<List<Comida>> =
-        repo.getAllComidas()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    val comidas: StateFlow<List<Comida>> =
-        repo.getAllComidas().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-
-
-    val comidasConOferta: StateFlow<List<Comida>> =
-        repo.getOfertas()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    fun comidasPorTipo(tipo: String): Flow<List<Comida>> =
-        repo.getComidasPorTipo(tipo)
-
-    fun agregar(nombre: String, descripcion: String, precio: Double, tipoComida: String, oferta: Boolean) =
-        viewModelScope.launch {
-            try {
-                repo.insertarComida(
-                    Comida(
-                        nombre = nombre,
-                        descripcion = descripcion,
-                        precio = precio,
-                        tipoComida = tipoComida,
-                        oferta = oferta,
-                        imagenResId = R.drawable.logo
-                    )
-                )
-                _mensaje.value = "Comida agregada correctamente"
-            } catch (e: Exception) {
-                _mensaje.value = e.message
-            }
-        }
-
-    fun insertar(comida: Comida) = viewModelScope.launch {
-        repo.insertarComida(comida)
-    }
-    fun ofertas() : Flow<List<Comida>>{
-         return repo.getOfertas()
-    }
-
-    fun actualizar(comida: Comida) = viewModelScope.launch {
-        repo.actualizarComida(comida)
-    }
-    fun eliminar(comida: Comida) = viewModelScope.launch {
-        repo.eliminarComida(comida)
-    }
+    // StateFlow para la lista completa de comidas
+    private val _comidas = MutableStateFlow<List<Comida>>(emptyList())
+    val comidas: StateFlow<List<Comida>> = _comidas
 
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
+
+    init {
+        val apiService = ComidaRetrofitInstance.api
+        repo = ComidaRepository(apiService)
+
+        //carga inicial de datos
+        fetchComidas()
+    }
+    fun fetchComidas() = viewModelScope.launch {
+        try {
+            _comidas.value = repo.getComidas()
+            _mensaje.value = "Menú cargado desde la API."
+        } catch (e: Exception) {
+            _mensaje.value = "ERROR al cargar el menú: ${e.message}"
+            _comidas.value = emptyList()
+        }
+    }
+
+    fun agregar(comida: Comida) = viewModelScope.launch {
+        try {
+            repo.insertarComida(comida)
+            fetchComidas()
+            _mensaje.value = "Comida agregada correctamente"
+        } catch (e: Exception) {
+            _mensaje.value = e.message
+        }
+    }
+
+    fun actualizar(comida: Comida) = viewModelScope.launch {
+        try {
+            repo.actualizarComida(comida)
+            fetchComidas()
+            _mensaje.value = "Comida actualizada correctamente"
+        } catch (e: Exception) {
+            _mensaje.value = e.message
+        }
+    }
+
+    fun eliminar(id: Int) = viewModelScope.launch {
+        try {
+            repo.eliminarComida(id)
+            fetchComidas()
+            _mensaje.value = "Comida eliminada correctamente"
+        } catch (e: Exception) {
+            _mensaje.value = e.message
+        }
+    }
+
+    fun ofertas(): List<Comida> {
+        return _comidas.value.filter { it.oferta == true }
+    }
+ 
+    fun comidasPorTipo(tipo: String): List<Comida> {
+        return _comidas.value.filter { it.tipoComida.equals(tipo, true) }
+    }
 }

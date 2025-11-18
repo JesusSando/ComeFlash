@@ -1,18 +1,26 @@
 package com.example.comeflash.data.repository
-import com.example.comeflash.data.database.comidaDao
 import com.example.comeflash.data.model.Comida
+import com.example.comeflash.data.remote.ComidaApiService
 import kotlinx.coroutines.flow.Flow
-class ComidaRepository(private val dao: comidaDao) {
+class ComidaRepository(private val apiService: ComidaApiService) {
 
-    fun getAllComidas(): Flow<List<Comida>> = dao.getAllComidas()
+    //obtener todos
+    suspend fun getComidas(): List<Comida> {
+        return apiService.getAllComidas()
+    }
 
-    fun getOfertas(): Flow<List<Comida>> = dao.getOfertas()
+    // Insertar
+    suspend fun insertarComida(comida: Comida): Comida {
+        return apiService.addComida(comida)
+    }
 
-    fun getComidasPorTipo(tipo: String): Flow<List<Comida>> = dao.getComidasPorTipo(tipo)
+    //Actualizar
+    suspend fun actualizarComida(comida: Comida): Comida {
+        return apiService.updateComida(comida.id, comida)
+    }
 
-    suspend fun insertarComida(comida: Comida) = dao.insertaComida(comida)
-
-    suspend fun actualizarComida(comida: Comida) = dao.actualozarComida(comida)
-
-    suspend fun eliminarComida(comida: Comida) = dao.eliminarComida(comida)
+    //Eliminar
+    suspend fun eliminarComida(id: Int) {
+        apiService.deleteComida(id)
+    }
 }

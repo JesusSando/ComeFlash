@@ -33,7 +33,7 @@ import androidx.compose.material3.Text
 import com.example.comeflash.data.model.Comida
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.R
-
+/*
 @Composable
 fun AdminComida(
     navController: NavController,
@@ -276,3 +276,5 @@ fun AdminComida(
         }
     }
 }
+
+ */

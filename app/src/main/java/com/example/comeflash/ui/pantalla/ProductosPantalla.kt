@@ -38,21 +38,16 @@ fun ProductosPantalla(
     comidaViewModel: ComidaViewModel,
     carritoViewModel: CarritoViewModel
 ) {
-    val context = LocalContext.current
+
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        CreacionComida(context)
-    }
+
 
     val comidas by comidaViewModel.comidas.collectAsState()
     var ComidaOfertas by remember { mutableStateOf(listOf<Comida>()) }
     var tipoSeleccionado by remember { mutableStateOf("Todos") }
 
-    LaunchedEffect(Unit) {
-        comidaViewModel.ofertas().collectLatest { ComidaOfertas = it }
-    }
 
     val comidasFiltradas = remember(comidas, tipoSeleccionado) {
         if (tipoSeleccionado == "Todos") comidas
@@ -95,7 +90,7 @@ fun ProductosPantalla(
                 items(ComidaOfertas) { comida ->
                     ComidaCarta(
                         comida = comida,
-                        onVer = { navController.navigate("detalleProducto/${comida.id}") },
+                        onVer = { rootNavController.navigate("detalleProducto/${comida.id}") },
                         onAgregar = {
                             scope.launch {
                                 isLoading = true
