@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.comeflash.data.database.CreacionComida
 import com.example.comeflash.data.model.Comida
 import com.example.comeflash.viewmodel.CarritoViewModel
 import com.example.comeflash.viewmodel.ComidaViewModel
@@ -45,9 +44,12 @@ fun ProductosPantalla(
 
 
     val comidas by comidaViewModel.comidas.collectAsState()
-    var ComidaOfertas by remember { mutableStateOf(listOf<Comida>()) }
     var tipoSeleccionado by remember { mutableStateOf("Todos") }
 
+
+    val ComidaOfertas = remember(comidas) {
+        comidas.filter { it.oferta == true }
+    }
 
     val comidasFiltradas = remember(comidas, tipoSeleccionado) {
         if (tipoSeleccionado == "Todos") comidas
@@ -216,7 +218,7 @@ fun ComidaCarta(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
+           /* Image(
                 painter = painterResource(id = comida.imagenResId),
                 contentDescription = comida.nombre,
                 contentScale = ContentScale.Crop,
@@ -224,6 +226,8 @@ fun ComidaCarta(
                     .size(80.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
+
+            */
 
             Spacer(Modifier.width(12.dp))
 

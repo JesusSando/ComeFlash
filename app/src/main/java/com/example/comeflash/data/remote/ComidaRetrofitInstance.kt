@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ComidaRetrofitInstance {
 
-    val API_BASE_URL = "http://10.234.42.169:8080/"
+    val API_BASE_URL = "http://10.0.2.2:8080/"
 
     val api: ComidaApiService by lazy {
         Retrofit.Builder()

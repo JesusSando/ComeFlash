@@ -15,7 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.core.content.ContextCompat
-import com.example.comeflash.data.database.CreacionComida
 import com.example.comeflash.data.database.CreacionUsuarios
 import com.example.comeflash.ui.pantalla.NavbarPrincipal
 import com.example.comeflash.ui.pantalla.inicioSesionPantalla
@@ -27,7 +26,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CreacionUsuarios(this)
-        CreacionComida(this)
         pedirPermisoNotificaciones()
         crearCanalNotificacion()
         setContent {

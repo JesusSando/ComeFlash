@@ -46,7 +46,7 @@ fun DetalleProductoPantalla(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // imagen del producto completo
-        Image(
+       /* Image(
             painter = painterResource(id = comida.imagenResId),
             contentDescription = comida.nombre,
             modifier = Modifier
@@ -54,6 +54,8 @@ fun DetalleProductoPantalla(
                 .clip(RoundedCornerShape(16.dp)),
             contentScale = ContentScale.Crop
         )
+
+        */
 
         Spacer(Modifier.height(16.dp))
 
