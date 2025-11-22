@@ -110,12 +110,11 @@ fun NavbarPrincipal(
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
 
-         /*   composable("adminComida") {
+           composable("adminComida") {
                 val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-
+                AdminComida(navController, comidaViewModel )
             }
 
-          */
 
             composable("adminUsuarios") {
                 AdminUsuarios(navController, viewModel)

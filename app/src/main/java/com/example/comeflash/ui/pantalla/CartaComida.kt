@@ -38,6 +38,16 @@ fun DetalleProductoPantalla(
         return
     }
 
+
+    val nombre=comida.nombre?:""
+    val descripcion=comida.descripcion?:""
+    val tipo=comida.tipoComida?:""
+    val precio=comida.precio?:0.0
+    val precioOferta=comida.precioOferta?:0.0
+    val esOferta=comida.oferta?:false
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +70,7 @@ fun DetalleProductoPantalla(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = comida.nombre,
+            text = nombre,
             color = Color.White,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
@@ -69,7 +79,7 @@ fun DetalleProductoPantalla(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = comida.descripcion,
+            text = descripcion,
             color = Color.Gray,
             style = MaterialTheme.typography.bodyMedium,
 
@@ -77,21 +87,21 @@ fun DetalleProductoPantalla(
 
         Spacer(Modifier.height(12.dp))
 
-        if (comida.oferta && comida.precioOferta != null) {
+        if (esOferta && precioOferta != null) {
             Text(
-                text = "Oferta: $${comida.precioOferta}",
+                text = "Oferta: $${precioOferta}",
                 color = Color(0xFFFF9800),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = "Antes: $${comida.precio}",
+                text = "Antes: $${precio}",
                 color = Color.Gray,
                 textDecoration = TextDecoration.LineThrough
             )
         } else {
             Text(
-                text = "Precio: $${comida.precio}",
+                text = "Precio: $${precio}",
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )

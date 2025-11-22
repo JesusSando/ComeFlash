@@ -33,7 +33,7 @@ import androidx.compose.material3.Text
 import com.example.comeflash.data.model.Comida
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.R
-/*
+
 @Composable
 fun AdminComida(
     navController: NavController,
@@ -165,19 +165,33 @@ fun AdminComida(
                 Button(
                     onClick = {
                         if (nombre.isNotBlank() && precio.isNotBlank()) {
-                            val comida = Comida(
-                                id = idEditando ?: 0,
-                                nombre = nombre,
-                                descripcion = descripcion,
-                                precio = precio.toDouble(),
-                                tipoComida = tipo,
-                                oferta = oferta,
-                                precioOferta = precioOferta.toDoubleOrNull(),
-                                imagenResId = R.drawable.logo
-                            )
+                            val comidaAGuardar = if (editando) {
+                                val comidaExistente = comidas.find { it.id == idEditando }!!
+                                comidaExistente.copy(
+                                    nombre = nombre,
+                                    descripcion = descripcion,
+                                    precio = precio.toDoubleOrNull() ?: comidaExistente.precio,
+                                    tipoComida = tipo,
+                                    oferta = oferta,
+                                    precioOferta = precioOferta.toDoubleOrNull() ?: comidaExistente.precioOferta,
+                                    imagenUrl = comidaExistente.imagenUrl
 
-                            if (editando) comidaViewModel.actualizar(comida)
-                            else comidaViewModel.insertar(comida)
+                                )
+                            } else {
+                                Comida(
+                                    id = 0,
+                                    nombre = nombre,
+                                    descripcion = descripcion,
+                                    precio = precio.toDoubleOrNull() ?: 0.0,
+                                    tipoComida = tipo,
+                                    oferta = oferta,
+                                    precioOferta = precioOferta.toDoubleOrNull(),
+                                    imagenUrl = ""
+                                )
+                            }
+
+                            if (editando) comidaViewModel.actualizar(comidaAGuardar)
+                            else comidaViewModel.agregar(comidaAGuardar)
 
                             // Resetear formulario
                             nombre = ""
@@ -194,6 +208,7 @@ fun AdminComida(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(if (editando) "Guardar cambios" else "Agregar", color = Color.White)
+
                 }
                 if (editando) {
                     OutlinedButton(
@@ -239,6 +254,7 @@ fun AdminComida(
                     modifier = Modifier.padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    /*
                     Image(
                         painter = painterResource(comida.imagenResId),
                         contentDescription = comida.nombre,
@@ -248,27 +264,29 @@ fun AdminComida(
                         contentScale = ContentScale.Crop
                     )
 
+                     */
+
                     Spacer(Modifier.width(8.dp))
 
                     Column(Modifier.weight(1f)) {
-                        Text(comida.nombre, color = Color.White, fontWeight = FontWeight.Bold)
-                        Text("$${comida.precio}", color = Color.Gray)
-                        Text(comida.tipoComida, color = Color(0xFFFF9800))
+                        Text(comida.nombre?:"", color = Color.White, fontWeight = FontWeight.Bold)
+                        Text("$${comida.precio?:""}", color = Color.Gray)
+                        Text(comida.tipoComida?:"", color = Color(0xFFFF9800))
                     }
 
                     IconButton(onClick = {
                         idEditando = comida.id
-                        nombre = comida.nombre
-                        descripcion = comida.descripcion
-                        precio = comida.precio.toString()
-                        tipo = comida.tipoComida
+                        nombre = comida.nombre?:""
+                        descripcion = comida.descripcion?:""
+                        precio = comida.precio.toString()?:""
+                        tipo = comida.tipoComida?:""
                         oferta = comida.oferta
                         precioOferta = comida.precioOferta?.toString() ?: ""
                         editando = true
                     }) {
                         Icon(Icons.Default.Edit, contentDescription = "Editar", tint = Color(0xFFFF9800))
                     }
-                    IconButton(onClick = { comidaViewModel.eliminar(comida) }) {
+                    IconButton(onClick = { comidaViewModel.eliminar(comida.id) }) {
                         Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
                     }
                 }
@@ -277,4 +295,4 @@ fun AdminComida(
     }
 }
 
- */
+

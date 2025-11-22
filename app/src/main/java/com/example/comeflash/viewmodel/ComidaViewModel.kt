@@ -1,5 +1,6 @@
 package com.example.comeflash.viewmodel
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.comeflash.R
@@ -47,8 +48,10 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
         }
     }
 
+
     fun actualizar(comida: Comida) = viewModelScope.launch {
         try {
+            Log.d("AdminComida", "Actualizando comidaaaa: $comida") // <- línea de debug
             repo.actualizarComida(comida)
             fetchComidas()
             _mensaje.value = "Comida actualizada correctamente"

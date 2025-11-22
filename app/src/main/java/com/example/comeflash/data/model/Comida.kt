@@ -14,6 +14,6 @@ data class Comida (
     val precio: Double,
     val precioOferta: Double? = null,
     val oferta: Boolean = false,
-    val tipoComida: String,
-    val imagenResId: String
+    val tipoComida: String="",
+    val imagenUrl: String?=""
 )

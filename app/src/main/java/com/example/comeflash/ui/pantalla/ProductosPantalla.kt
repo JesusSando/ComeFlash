@@ -179,7 +179,7 @@ fun FiltroComidas(
     tipoSeleccionado: String,
     onTipoSeleccionado: (String) -> Unit
 ) {
-    val tipos = listOf("Todos", "Hamburguesa", "Pizza", "Acompañamiento")
+    val tipos = listOf("Todos", "Hamburguesa", "Pizza", "Otro")
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -208,6 +208,13 @@ fun ComidaCarta(
     onAgregar: () -> Unit,
     isOferta: Boolean = false
 ) {
+
+    val nombre=comida.nombre?:""
+    val descripcion=comida.descripcion?:""
+    val tipo=comida.tipoComida?:""
+    val precio=comida.precio?:0.0
+    val precioOferta=comida.precioOferta?:0.0
+    val esOferta=comida.oferta?:false
     Card(
         modifier = Modifier
             .padding(vertical = 6.dp)
@@ -234,16 +241,19 @@ fun ComidaCarta(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(comida.nombre, color = Color.White, fontWeight = FontWeight.Bold)
-                Text(comida.descripcion, color = Color.Gray, maxLines = 2)
+                Text(nombre, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(descripcion, color = Color.Gray, maxLines = 2)
+
+
+
                 if (isOferta && comida.precioOferta != null) {
                     Text(
-                        "Oferta: $${comida.precioOferta}",
+                        "Oferta: $${precioOferta}",
                         color = Color(0xFFFF9800),
                         fontWeight = FontWeight.Bold
                     )
                 } else {
-                    Text("Precio: $${comida.precio}", color = Color.White)
+                    Text("Precio: $${precio}", color = Color.White)
                 }
                 Row {
                     TextButton(onClick = onVer,
