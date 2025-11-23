@@ -15,6 +15,7 @@ import com.example.comeflash.ui.screen.RegistroPantalla
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 import com.example.comeflash.viewmodel.CarritoViewModel
+import com.example.comeflash.viewmodel.NutrientesViewmodel
 
 @Composable
 fun navbar(
@@ -130,10 +131,14 @@ fun NavbarPrincipal(
                 val comidaViewModel: ComidaViewModel =
                     androidx.lifecycle.viewmodel.compose.viewModel()
 
+                val nutrientesViewModel: NutrientesViewmodel =
+                    androidx.lifecycle.viewmodel.compose.viewModel()
+
                 id?.let {
                     DetalleProductoPantalla(
                         navController = navController,
                         comidaViewModel = comidaViewModel,
+                        nutrientesViewModel = nutrientesViewModel,
                         comidaId = it
                     )
                 }

@@ -1,6 +1,8 @@
 package com.example.comeflash.data.repository
 import com.example.comeflash.data.model.Comida
+import com.example.comeflash.data.model.NutrientesComida
 import com.example.comeflash.data.remote.ComidaApiService
+import com.example.comeflash.data.remote.OpenFoodRetrofitInstance
 import kotlinx.coroutines.flow.Flow
 class ComidaRepository(private val apiService: ComidaApiService) {
 
@@ -23,4 +25,6 @@ class ComidaRepository(private val apiService: ComidaApiService) {
     suspend fun eliminarComida(id: Int) {
         apiService.deleteComida(id)
     }
+
+
 }

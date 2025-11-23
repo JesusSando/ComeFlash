@@ -77,4 +77,7 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
     fun comidasPorTipo(tipo: String): List<Comida> {
         return _comidas.value.filter { it.tipoComida.equals(tipo, true) }
     }
+
+
+
 }

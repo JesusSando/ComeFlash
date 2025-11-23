@@ -174,7 +174,7 @@ fun AdminComida(
                                     tipoComida = tipo,
                                     oferta = oferta,
                                     precioOferta = precioOferta.toDoubleOrNull() ?: comidaExistente.precioOferta,
-                                    imagenUrl = comidaExistente.imagenUrl
+
 
                                 )
                             } else {
@@ -185,8 +185,8 @@ fun AdminComida(
                                     precio = precio.toDoubleOrNull() ?: 0.0,
                                     tipoComida = tipo,
                                     oferta = oferta,
-                                    precioOferta = precioOferta.toDoubleOrNull(),
-                                    imagenUrl = ""
+                                    precioOferta = precioOferta.toDoubleOrNull()
+
                                 )
                             }
 

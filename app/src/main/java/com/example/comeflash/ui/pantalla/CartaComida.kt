@@ -1,10 +1,14 @@
 package com.example.comeflash.ui.pantalla
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,13 +22,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.comeflash.viewmodel.ComidaViewModel
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.example.comeflash.viewmodel.NutrientesViewmodel
 
 @Composable
 fun DetalleProductoPantalla(
     navController: NavController,
     comidaViewModel: ComidaViewModel,
+    nutrientesViewModel: NutrientesViewmodel,
     comidaId: Int
 ) {
+
+
+
     val comidas by comidaViewModel.comidas.collectAsState()
     val comida = comidas.find { it.id == comidaId }
 
@@ -45,6 +56,21 @@ fun DetalleProductoPantalla(
     val precio=comida.precio?:0.0
     val precioOferta=comida.precioOferta?:0.0
     val esOferta=comida.oferta?:false
+    val codigo=comida.codigo?:""
+
+
+
+    Log.d("OFF_DEBUG", "Código de barras usado: $codigo") // <-- ¡Añade esto!
+    LaunchedEffect(codigo) {
+        if (codigo.isNotBlank()) {
+            nutrientesViewModel.cargarNutrientes(codigo) // Llama al ViewModel
+        }
+    }
+
+
+
+    val nutrientes by nutrientesViewModel.nutrientes.collectAsState()
+
 
 
 
@@ -55,17 +81,31 @@ fun DetalleProductoPantalla(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // imagen del producto completo
-       /* Image(
-            painter = painterResource(id = comida.imagenResId),
-            contentDescription = comida.nombre,
-            modifier = Modifier
-                .size(200.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Crop
-        )
+        //img
+        // Dentro de DetalleProductoPantalla, después de obtener 'nutrientes':
 
-        */
+// 1. Mostrar la imagen si la URL NO es nula.
+        nutrientes?.imagenUrl?.let { imagen ->
+            AsyncImage(
+                model = imagen,
+                contentDescription = nombre,
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+// 2. Mostrar un ícono de reemplazo si no hay URL disponible (Opcional, pero recomendado).
+//    Esto usa la imagen que NO pudiste cargar para decidir si mostrar un reemplazo.
+        if (nutrientes?.imagenUrl.isNullOrBlank()) {
+            Icon(
+                imageVector = Icons.Default.Check, // Un ícono simple de Material Icons
+                contentDescription = "Sin imagen disponible",
+                modifier = Modifier.size(200.dp),
+                tint = Color.Gray
+            )
+        }
 
         Spacer(Modifier.height(16.dp))
 
@@ -128,5 +168,43 @@ fun DetalleProductoPantalla(
         ) {
             Text("Volver", color = Color.White)
         }
+
+
+
+
+        Spacer(Modifier.height(12.dp))
+
+        nutrientes?.let { info ->
+            Divider(color = Color.Gray, thickness = 1.dp)
+            Spacer(Modifier.height(12.dp))
+
+            Text("Información Nutricional", color = Color.White, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(12.dp))
+
+            Text("Calorías: ${info.calorias ?: "N/A"} kcal", color = Color.White)
+            Text("Grasas: ${info.grasas ?: "N/A"} g", color = Color.White)
+            Text("Grasas saturadas: ${info.grasasSaturadas ?: "N/A"} g", color = Color.White)
+            Text("Carbohidratos: ${info.carbohidratos ?: "N/A"} g", color = Color.White)
+            Text("Azúcares: ${info.azucares ?: "N/A"} g", color = Color.White)
+            Text("Fibra: ${info.fibra ?: "N/A"} g", color = Color.White)
+            Text("Proteínas: ${info.proteinas ?: "N/A"} g", color = Color.White)
+            Text("Sal: ${info.sal ?: "N/A"} g", color = Color.White)
+        }
+        if (codigo.isNotBlank()) {
+            Text(
+                text = "Datos de Open Food Facts",
+                fontSize = 10.sp,
+                color = Color.LightGray,
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .clickable {
+                        // Abre el enlace del producto en el navegador
+                        val url = "https://world.openfoodfacts.org/product/$codigo"
+
+                    }
+            )
+        }
+
+
     }
 }
