@@ -17,24 +17,21 @@ class NutrientesReposity {
                 val product = response.product
                 val nutriments = product?.nutriments
                 Log.d("OFF_DEBUG", "Status OK. URL recibida: ${product?.imageUrl}")
-                Log.d("OFF_DATA", "Kcal 100g: ${nutriments?.kcal100g}")
-                Log.d("OFF_DATA", "Fat 100g: ${nutriments?.fat100g}")
+
 
                 NutrientesComida(
 
 
                     imagenUrl = product?.imageUrl,
 
-
-
-                    calorias = nutriments?.kcal100g?.toDoubleOrNull()?.toInt(),
-                    grasas = nutriments?.fat100g?.toDouble(),
-                    grasasSaturadas = nutriments?.satFat100g?.toDouble(),
-                    carbohidratos = nutriments?.carbs100g?.toDouble(),
-                    azucares = nutriments?.sugars100g?.toDouble(),
-                    fibra = nutriments?.fiber100g?.toDouble(),
-                    proteinas = nutriments?.proteins100g?.toDouble(),
-                    sal = nutriments?.salt100g?.toDouble()
+                    calorias = nutriments?.kcal?.toIntOrNull(),
+                    grasas = nutriments?.fat?.toDoubleOrNull(),
+                    grasasSaturadas = nutriments?.satFat?.toDoubleOrNull(),
+                    carbohidratos = nutriments?.carbs?.toDoubleOrNull(),
+                    azucares = nutriments?.sugars?.toDoubleOrNull(),
+                    fibra = nutriments?.fiber?.toDoubleOrNull(),
+                    proteinas = nutriments?.proteins?.toDoubleOrNull(),
+                    sal = nutriments?.salt?.toDoubleOrNull()
 
 
                 )

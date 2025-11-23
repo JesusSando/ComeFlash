@@ -5,9 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface OpenFoodApiService {
-    // ✅ CAMBIO DE V0 A V2 Y ELIMINAMOS .json
-    @GET("api/v2/product/{code}")
+    @GET("api/v2/product/{code}.json")
     suspend fun getProduct(
         @Path("code") code: String
-    ): ProductResponse // <-- Necesitamos que ProductResponse tenga el status
+    ): ProductResponse
 }

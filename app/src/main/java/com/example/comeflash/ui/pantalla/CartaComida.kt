@@ -81,11 +81,9 @@ fun DetalleProductoPantalla(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //img
-        // Dentro de DetalleProductoPantalla, después de obtener 'nutrientes':
 
-// 1. Mostrar la imagen si la URL NO es nula.
         nutrientes?.imagenUrl?.let { imagen ->
+
             AsyncImage(
                 model = imagen,
                 contentDescription = nombre,
@@ -96,11 +94,10 @@ fun DetalleProductoPantalla(
             )
         }
 
-// 2. Mostrar un ícono de reemplazo si no hay URL disponible (Opcional, pero recomendado).
-//    Esto usa la imagen que NO pudiste cargar para decidir si mostrar un reemplazo.
+
         if (nutrientes?.imagenUrl.isNullOrBlank()) {
             Icon(
-                imageVector = Icons.Default.Check, // Un ícono simple de Material Icons
+                imageVector = Icons.Default.Check,
                 contentDescription = "Sin imagen disponible",
                 modifier = Modifier.size(200.dp),
                 tint = Color.Gray
@@ -198,7 +195,6 @@ fun DetalleProductoPantalla(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .clickable {
-                        // Abre el enlace del producto en el navegador
                         val url = "https://world.openfoodfacts.org/product/$codigo"
 
                     }
