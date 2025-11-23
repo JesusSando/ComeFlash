@@ -1,20 +1,37 @@
 package com.example.comeflash.data.repository
-import com.example.comeflash.data.database.usuarioDao
+
 import com.example.comeflash.data.model.Usuario
-import kotlinx.coroutines.flow.Flow
-class UsuarioRepository(private val dao: usuarioDao) {
-    fun getAllUsuarios(): Flow<List<Usuario>> = dao.getAllUsuarios()
+import com.example.comeflash.data.remote.UsuarioApiService
+import retrofit2.HttpException
 
-    suspend fun getUsuarioById(id: Int): Usuario? = dao.getUsuarioById(id)
+class UsuarioRepository(
+    private val api: UsuarioApiService
+) {
 
-    suspend fun getUsuarioPorCorreo(correo: String): Usuario? = dao.getUsuarioPorCorreo(correo)
+    suspend fun getAllUsuarios(): List<Usuario> =
+        api.getAllUsuarios()
 
+    suspend fun getUsuarioById(id: Int): Usuario? =
+        try {
+            api.getUsuarioById(id)
+        } catch (e: HttpException) {
+            if (e.code() == 404) null else throw e
+        }
 
-    suspend fun actualizarUsuario(usuario: Usuario) = dao.updateUsuario(usuario)
+    suspend fun getUsuarioPorCorreo(correo: String): Usuario? =
+        try {
+            api.getUsuarioPorCorreo(correo)
+        } catch (e: HttpException) {
+            if (e.code() == 404) null else throw e
+        }
 
-    suspend fun eliminarUsuario(usuario: Usuario) = dao.deleteUsuario(usuario)
+    suspend fun insertarUsuario(usuario: Usuario): Usuario =
+        api.insertarUsuario(usuario)
 
-    suspend fun insertarUsuario(usuario: Usuario) {
-        dao.insertar(usuario)
+    suspend fun actualizarUsuario(usuario: Usuario): Usuario =
+        api.actualizarUsuario(usuario.id!!, usuario)
+
+    suspend fun eliminarUsuario(id: Int) {
+        api.eliminarUsuario(id)
     }
 }

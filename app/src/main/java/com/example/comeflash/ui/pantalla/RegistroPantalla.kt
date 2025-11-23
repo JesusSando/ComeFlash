@@ -39,7 +39,19 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
     var confirmarContraseña by remember { mutableStateOf("") }
     var confirmarError by remember { mutableStateOf<String?>(null) }
 
-    val scope=rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
+
+    // 👇 NUEVO: observamos el mensaje del ViewModel
+    val mensajeRegistro by viewModel.mensajeRegistro.collectAsState()
+
+    // 👇 NUEVO: cuando el mensaje cambie a "Registro exitoso.", navegamos
+    LaunchedEffect(mensajeRegistro) {
+        if (mensajeRegistro == "Registro exitoso.") {
+            navController.navigate("login") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -86,9 +98,15 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
             // nombre
             OutlinedTextField(
                 value = nombre,
-                onValueChange = {  nombre=it },
+                onValueChange = { nombre = it },
                 label = { Text("Nombre completo") },
-                leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null, tint = Color.White) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Person,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -104,11 +122,17 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
             // correo
             OutlinedTextField(
                 value = correo,
-                onValueChange = { correo= it },
+                onValueChange = { correo = it },
                 label = { Text("Correo") },
-                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null, tint = Color.White) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-               // isError = correoError,
+                // isError = correoError,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -119,19 +143,23 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                     cursorColor = Color(0xFFFF9800)
                 ),
             )
-           //if (correoError)
-             //   Text("Correo inválido", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Contraseña
             OutlinedTextField(
                 value = contraseña,
-                onValueChange = { contraseña= it },
+                onValueChange = { contraseña = it },
                 label = { Text("Contraseña") },
-                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null, tint = Color.White) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Lock,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                },
                 visualTransformation = PasswordVisualTransformation(),
-             //   isError = contraseñaError,
+                //   isError = contraseñaError,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -143,7 +171,7 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                 ),
             )
 
-          //  if (contraseñaError)
+            //  if (contraseñaError)
             //    Text("Contraseña muy corta", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -152,11 +180,10 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
             // Contraseña
             OutlinedTextField(
                 value = confirmarContraseña,
-                onValueChange = { confirmarContraseña= it },
+                onValueChange = { confirmarContraseña = it },
                 label = { Text("confirmar Contraseña") },
-                leadingIcon = { Icon(Icons.Filled.Lock,null, tint = Color.White) },
+                leadingIcon = { Icon(Icons.Filled.Lock, null, tint = Color.White) },
                 visualTransformation = PasswordVisualTransformation(),
-                //   isError = contraseñaError,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFFF9800),
@@ -179,8 +206,12 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                         confirmarError = null
                         scope.launch {
                             viewModel.registrar(nombre, correo, contraseña)
-                            navController.navigate("login") {
-                                popUpTo("registro") { inclusive = true }
+
+                            // 👇 Esperar a que el ViewModel actualice el mensaje
+                            if (viewModel.mensajeRegistro.value == "Registro exitoso.") {
+                                navController.navigate("login") {
+                                    popUpTo("registro") { inclusive = true }
+                                }
                             }
                         }
                     }
@@ -197,14 +228,6 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                     color = Color.Black,
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 )
-            }
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            TextButton(onClick = { navController.navigate("login") }) {
-                Text("¿Tienes cuenta? Inicia Sesion", color = Color(0xFF00E676))
             }
         }
     }

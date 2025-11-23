@@ -11,21 +11,11 @@ import kotlinx.coroutines.launch
 
 fun CreacionUsuarios(context: Context) {
     val db = AppDatabase.get(context)
-    val usuarioDao = db.usuarioDao()
 
     CoroutineScope(Dispatchers.IO).launch {
-        val usuariosExistentes = usuarioDao.getAllUsuarios().firstOrNull() ?: emptyList()
 
-        if (usuariosExistentes.isEmpty()) {
-            usuarioDao.insertar(
-                Usuario(
-                    nombre = "Admindeejemplo",
-                    correo = "admin@comeflash.com",
-                    contraseña = "admin123",
-                    tipoUsuario = "admin",
-                    logoUri = "default_user.png"
-                )
-            )
+
+
         }
-    }
 }
+
