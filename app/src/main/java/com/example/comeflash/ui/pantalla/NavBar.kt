@@ -34,9 +34,9 @@ fun navbar(
         NavItem("Perfil", "perfil", Icons.Default.Person)
     )
 
-    if (usuario?.rol?.nombre == "admin") {
-        items.add(NavItem("Admin comida", "AdminComida", Icons.Default.Settings))
-        items.add(NavItem("Admin usuarios", "AdminUsuarios", Icons.Default.Settings))
+    if (usuario?.rol?.nombre.equals("ADMIN", ignoreCase = true)) {
+        items.add(NavItem("Admin comida", "adminComida", Icons.Default.Settings))
+        items.add(NavItem("Admin usuarios", "adminUsuarios", Icons.Default.Settings))
     }
 
 
