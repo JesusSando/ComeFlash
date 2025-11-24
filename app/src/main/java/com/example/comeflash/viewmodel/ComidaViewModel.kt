@@ -22,7 +22,7 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
     val mensaje: StateFlow<String?> = _mensaje
 
     init {
-        val apiService = ComidaRetrofitInstance.api
+        val apiService = ComidaRetrofitInstance.apiComida
         repo = ComidaRepository(apiService)
 
         //carga inicial de datos

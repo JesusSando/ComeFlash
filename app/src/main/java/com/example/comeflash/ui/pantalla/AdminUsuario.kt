@@ -1,4 +1,5 @@
 package com.example.comeflash.ui.pantalla
+
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,13 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.example.comeflash.data.model.Usuario
 import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.Text
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.Image
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -33,9 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-
-
 import com.example.comeflash.R
+import com.example.comeflash.data.model.Rol
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @Composable
@@ -44,10 +39,11 @@ fun AdminUsuarios(
     usuarioViewModel: UsuarioViewModel
 ) {
     val usuarios by usuarioViewModel.usuarios.collectAsState()
+
     var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
-    var contraseña by remember { mutableStateOf("") }
-    var tipoUsuario by remember { mutableStateOf("cliente") }
+    var contrasena by remember { mutableStateOf("") }
+    var rolNombre by remember { mutableStateOf("cliente") }  // admin / cliente
     var editando by remember { mutableStateOf(false) }
     var idEditando by remember { mutableStateOf<Int?>(null) }
 
@@ -77,7 +73,6 @@ fun AdminUsuarios(
             )
             Spacer(Modifier.height(8.dp))
 
-            // Campo para el correo
             OutlinedTextField(
                 value = correo,
                 onValueChange = { correo = it },
@@ -87,12 +82,12 @@ fun AdminUsuarios(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
                 )
-
             )
             Spacer(Modifier.height(8.dp))
+
             OutlinedTextField(
-                value = contraseña,
-                onValueChange = { contraseña = it },
+                value = contrasena,
+                onValueChange = { contrasena = it },
                 label = { Text("Contraseña", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -102,11 +97,10 @@ fun AdminUsuarios(
             )
             Spacer(Modifier.height(8.dp))
 
-
             OutlinedTextField(
-                value = tipoUsuario,
-                onValueChange = { tipoUsuario = it },
-                label = { Text("Tipo de usuario", color = Color.White) },
+                value = rolNombre,
+                onValueChange = { rolNombre = it },
+                label = { Text("Rol (admin / cliente)", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.White,
@@ -115,30 +109,40 @@ fun AdminUsuarios(
             )
             Spacer(Modifier.height(12.dp))
 
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = {
-                        // Validamos que los campos estén llenos
-                        if (nombre.isNotBlank() && correo.isNotBlank() && contraseña.isNotBlank()) {
-                            val usuario = Usuario(
-                                id = idEditando ?: 0,
-                                nombre = nombre,
-                                correo = correo,
-                                contraseña = contraseña,
-                                tipoUsuario = tipoUsuario
+                        if (nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()) {
+
+                            // Mapear rolNombre a Rol con id (ajusta los ids a tu BD)
+                            val rol = Rol(
+                                id = if (rolNombre.equals("admin", ignoreCase = true)) 1 else 2,
+                                nombre = rolNombre.lowercase()
                             )
 
-                            if (editando) usuarioViewModel.actualizarUsuario(usuario)
-                            else usuarioViewModel.registrar(nombre, correo, contraseña, tipoUsuario)
+                            if (editando) {
+                                // Actualizar usuario existente
+                                val usuario = Usuario(
+                                    id = idEditando,
+                                    nombre = nombre,
+                                    correo = correo,
+                                    contrasena = contrasena,
+                                    rol = rol
+                                )
+                                usuarioViewModel.actualizarUsuario(usuario)
+                            } else {
+                                // Registrar nuevo usuario (el ViewModel pondrá rol por defecto si quieres)
+                                usuarioViewModel.registrar(nombre, correo, contrasena)
+                            }
 
+                            // Limpiar formulario
                             nombre = ""
                             correo = ""
-                            contraseña = ""
-                            tipoUsuario = "cliente"
+                            contrasena = ""
+                            rolNombre = "cliente"
                             editando = false
                             idEditando = null
                         }
@@ -151,12 +155,13 @@ fun AdminUsuarios(
 
                 if (editando) {
                     OutlinedButton(
-                        onClick = { editando = false
+                        onClick = {
+                            editando = false
                             idEditando = null
                             nombre = ""
                             correo = ""
-                            contraseña = ""
-                            tipoUsuario = "cliente"
+                            contrasena = ""
+                            rolNombre = "cliente"
                         },
                         border = BorderStroke(1.dp, Color.Gray),
                         modifier = Modifier.weight(1f)
@@ -200,15 +205,15 @@ fun AdminUsuarios(
                     Column(Modifier.weight(1f)) {
                         Text(usuario.nombre, color = Color.White)
                         Text(usuario.correo, color = Color.White)
-                        Text(usuario.tipoUsuario, color = Color.White)
+                        Text(usuario.rol?.nombre ?: "sin rol", color = Color.White)
                     }
 
                     IconButton(onClick = {
                         idEditando = usuario.id
                         nombre = usuario.nombre
                         correo = usuario.correo
-                        contraseña = usuario.contraseña
-                        tipoUsuario = usuario.tipoUsuario
+                        contrasena = usuario.contrasena
+                        rolNombre = usuario.rol?.nombre ?: "cliente"
                         editando = true
                     }) {
                         Icon(Icons.Default.Edit, contentDescription = "Editar", tint = Color(0xFFFF9800))
@@ -222,4 +227,3 @@ fun AdminUsuarios(
         }
     }
 }
-

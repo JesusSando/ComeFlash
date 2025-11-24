@@ -175,7 +175,7 @@ fun PerfilPantalla(
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "Tipo: ${usuario?.tipoUsuario ?: "Cliente"}",
+                        text = "Tipo: ${usuario?.rol ?: "Cliente"}",
                         color = Color.Gray,
                         fontSize = 14.sp
                     )

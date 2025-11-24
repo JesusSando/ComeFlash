@@ -7,7 +7,6 @@ import com.example.comeflash.data.model.*
 
 @Database(
     entities = [
-        Usuario::class,
         Compra::class,
         DetalleCompra::class,
 
@@ -16,7 +15,6 @@ import com.example.comeflash.data.model.*
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun usuarioDao(): usuarioDao
 
     abstract fun compraDao(): compraDao
     abstract fun detalleCompraDao(): detalleCompraDao
