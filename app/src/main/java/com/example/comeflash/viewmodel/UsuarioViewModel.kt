@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class UsuarioViewModel(application: Application) : AndroidViewModel(application) {
+class UsuarioViewModel : AndroidViewModel {
 
-    private val repo = UsuarioRepository(ComidaRetrofitInstance.apiUsuario)
+    private val repo: UsuarioRepository
 
     private val _usuarios = MutableStateFlow<List<Usuario>>(emptyList())
     val usuarios: StateFlow<List<Usuario>> = _usuarios
@@ -27,7 +27,15 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
     private val _mensajeInicioSesion = MutableStateFlow<String?>(null)
     val mensajeInicioSesion: StateFlow<String?> = _mensajeInicioSesion
 
-    init {
+    // Constructor usado por la APP real (factory de Android)
+    constructor(application: Application) : super(application) {
+        repo = UsuarioRepository(ComidaRetrofitInstance.apiUsuario)
+        recargarUsuarios()
+    }
+
+    // Constructor usado en TESTS (inyectamos repo mockeado)
+    constructor(application: Application, testRepo: UsuarioRepository) : super(application) {
+        repo = testRepo
         recargarUsuarios()
     }
 
@@ -49,7 +57,7 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
             nombre.isBlank() || correo.isBlank() || contrasena.isBlank() ->
                 _mensajeRegistro.value = "Completa todos los bloques."
 
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() ->
+            !esCorreoValido(correo) ->
                 _mensajeRegistro.value = "Correo no válido."
 
             contrasena.length < 6 ->
@@ -61,7 +69,6 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
                 if (usuarioExistente != null) {
                     _mensajeRegistro.value = "Ya existe un usuario con este correo."
                 } else {
-
                     val rolCliente = Rol(id = 1, nombre = "cliente")
                     val nuevoUsuario = Usuario(
                         nombre = nombre,
@@ -80,6 +87,11 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
         }
+    }
+
+    private fun esCorreoValido(correo: String): Boolean {
+        val regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+        return regex.matches(correo)
     }
 
     fun iniciarSesion(correo: String, contrasena: String) = viewModelScope.launch {
@@ -121,13 +133,13 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
         try {
             repo.actualizarUsuario(usuario)
             recargarUsuarios()
-        } catch (_: Exception) {}
+        } catch (_: Exception) { }
     }
 
     fun eliminarUsuario(usuario: Usuario) = viewModelScope.launch {
         try {
             usuario.id?.let { repo.eliminarUsuario(it) }
             recargarUsuarios()
-        } catch (_: Exception) {}
+        } catch (_: Exception) { }
     }
 }

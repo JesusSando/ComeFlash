@@ -228,6 +228,13 @@ fun RegistroPantalla(viewModel: UsuarioViewModel = viewModel(),
                     color = Color.Black,
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 )
+
+                Spacer(Modifier.height(20.dp))
+
+
+                }
+            TextButton(onClick = { navController.navigate("login") }) {
+                Text("¿Ya tienes cuenta? Inicia sesion", color = Color(0xFF00E676))
             }
         }
     }

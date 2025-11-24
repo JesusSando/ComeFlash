@@ -1,33 +1,38 @@
 package com.example.comeflash.viewmodel
+
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.comeflash.R
-import com.example.comeflash.data.database.AppDatabase
 import com.example.comeflash.data.model.Comida
+import com.example.comeflash.data.remote.ComidaRetrofitInstance
 import com.example.comeflash.data.repository.ComidaRepository
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import com.example.comeflash.data.remote.*
 
-class ComidaViewModel (application: Application) : AndroidViewModel(application) {
+class ComidaViewModel : AndroidViewModel {
+
     private val repo: ComidaRepository
 
-    // StateFlow para la lista completa de comidas
     private val _comidas = MutableStateFlow<List<Comida>>(emptyList())
     val comidas: StateFlow<List<Comida>> = _comidas
 
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
 
-    init {
+    // Constructor usado por la APP real
+    constructor(application: Application) : super(application) {
         val apiService = ComidaRetrofitInstance.apiComida
         repo = ComidaRepository(apiService)
-
-        //carga inicial de datos
         fetchComidas()
     }
+
+    // Constructor usado en TESTS
+    constructor(application: Application, testRepo: ComidaRepository) : super(application) {
+        repo = testRepo
+    }
+
     fun fetchComidas() = viewModelScope.launch {
         try {
             _comidas.value = repo.getComidas()
@@ -48,10 +53,9 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
         }
     }
 
-
     fun actualizar(comida: Comida) = viewModelScope.launch {
         try {
-            Log.d("AdminComida", "Actualizando comidaaaa: $comida") // <- línea de debug
+            Log.d("AdminComida", "Actualizando comida: $comida")
             repo.actualizarComida(comida)
             fetchComidas()
             _mensaje.value = "Comida actualizada correctamente"
@@ -70,14 +74,9 @@ class ComidaViewModel (application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun ofertas(): List<Comida> {
-        return _comidas.value.filter { it.oferta == true }
-    }
+    fun ofertas(): List<Comida> =
+        _comidas.value.filter { it.oferta == true }
 
-    fun comidasPorTipo(tipo: String): List<Comida> {
-        return _comidas.value.filter { it.tipoComida.equals(tipo, true) }
-    }
-
-
-
+    fun comidasPorTipo(tipo: String): List<Comida> =
+        _comidas.value.filter { it.tipoComida.equals(tipo, true) }
 }
