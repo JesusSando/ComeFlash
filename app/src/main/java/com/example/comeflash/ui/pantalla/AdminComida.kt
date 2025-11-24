@@ -49,6 +49,8 @@ fun AdminComida(
     var editando by remember { mutableStateOf(false) }
     var idEditando by remember { mutableStateOf<Int?>(null) }
 
+    var codigo by remember { mutableStateOf("") }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -157,6 +159,25 @@ fun AdminComida(
 
             Spacer(Modifier.height(12.dp))
 
+            OutlinedTextField(
+                value = codigo,
+                onValueChange = { codigo = it },
+                label = { Text("Código", color = Color.White) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFFFF9800),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedLabelColor = Color(0xFFFF9800),
+                    cursorColor = Color(0xFFFF9800)
+                )
+            )
+            Spacer(Modifier.height(12.dp))
+
+
+
+
             //cancelar la edicion
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -174,7 +195,7 @@ fun AdminComida(
                                     tipoComida = tipo,
                                     oferta = oferta,
                                     precioOferta = precioOferta.toDoubleOrNull() ?: comidaExistente.precioOferta,
-
+                                    codigo = codigo
 
                                 )
                             } else {
@@ -185,7 +206,8 @@ fun AdminComida(
                                     precio = precio.toDoubleOrNull() ?: 0.0,
                                     tipoComida = tipo,
                                     oferta = oferta,
-                                    precioOferta = precioOferta.toDoubleOrNull()
+                                    precioOferta = precioOferta.toDoubleOrNull(),
+                                    codigo = codigo
 
                                 )
                             }
@@ -202,6 +224,7 @@ fun AdminComida(
                             oferta = false
                             editando = false
                             idEditando = null
+                            codigo = ""
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
@@ -221,6 +244,7 @@ fun AdminComida(
                             precioOferta = ""
                             tipo = ""
                             oferta = false
+                            codigo = ""
                         },
                         border = BorderStroke(1.dp, Color.Gray),
                         modifier = Modifier.weight(1f)
@@ -272,6 +296,7 @@ fun AdminComida(
                         Text(comida.nombre?:"", color = Color.White, fontWeight = FontWeight.Bold)
                         Text("$${comida.precio?:""}", color = Color.Gray)
                         Text(comida.tipoComida?:"", color = Color(0xFFFF9800))
+                        Text("Código: ${comida.codigo ?: ""}", color = Color.Gray)
                     }
 
                     IconButton(onClick = {
@@ -282,6 +307,7 @@ fun AdminComida(
                         tipo = comida.tipoComida?:""
                         oferta = comida.oferta
                         precioOferta = comida.precioOferta?.toString() ?: ""
+                        codigo = comida.codigo ?: ""
                         editando = true
                     }) {
                         Icon(Icons.Default.Edit, contentDescription = "Editar", tint = Color(0xFFFF9800))
