@@ -13,6 +13,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.comeflash.ui.screen.RegistroPantalla
+import com.example.comeflash.viewmodel.BoletaViewModel
 import com.example.comeflash.viewmodel.ComidaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 import com.example.comeflash.viewmodel.CarritoViewModel
@@ -69,11 +70,12 @@ data class NavItem(
 fun NavbarPrincipal(
     viewModel: UsuarioViewModel,
     rootNavController: NavController,
-    carritoViewModel: CarritoViewModel
+    carritoViewModel: CarritoViewModel,
 ) {
     val navController = rememberNavController()
     val comidaViewModel: ComidaViewModel = viewModel()
     val nutrientesViewmodel: NutrientesViewmodel = viewModel()
+    val boletaViewModel: BoletaViewModel = viewModel()
 
 
     Scaffold(
@@ -102,22 +104,35 @@ fun NavbarPrincipal(
                     carritoViewModel = carritoViewModel
                 )
             }
-/*
+
             composable("formularioPago") {
-                FormularioPagoPantalla(navController, carritoViewModel)
+                FormularioPagoPantalla(
+                    navController = navController,
+                    carritoViewModel = carritoViewModel,
+                    usuarioViewModel = viewModel,
+                    boletaViewModel = boletaViewModel
+                )
             }
 
- */
 
-/*
             composable("boleta") {
-                BoletaPantalla(navController = navController, carritoViewModel = carritoViewModel)
+                BoletaPantalla(
+                    navController = navController,
+                    boletaViewModel = boletaViewModel
+                )
             }
 
- */
+
+
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
-            composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
+            composable("perfil") {
+                PerfilPantalla(
+                    navController = rootNavController,
+                    viewModel = viewModel,
+                    boletaViewModel = boletaViewModel
+                )
+            }
 
            composable("adminComida") {
                 AdminComida(

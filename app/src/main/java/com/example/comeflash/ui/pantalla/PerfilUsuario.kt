@@ -8,8 +8,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -28,17 +30,26 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.comeflash.R
+import com.example.comeflash.ui.components.BoletaCard
+import com.example.comeflash.viewmodel.BoletaViewModel
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilPantalla(
     navController: NavController,
-    viewModel: UsuarioViewModel = viewModel()
+    viewModel: UsuarioViewModel = viewModel(),
+    boletaViewModel: BoletaViewModel = viewModel()
 ) {
     val usuario by viewModel.usuarioActual.collectAsState()
     var imagenUri by remember { mutableStateOf<Uri?>(null) }
+    val boletas by boletaViewModel.boletas.collectAsState()
+    val mensajeBoletas by boletaViewModel.mensaje.collectAsState()
+    val scrollState = rememberScrollState()
 
+    LaunchedEffect(usuario?.id) {
+        usuario?.id?.let { boletaViewModel.cargarBoletasUsuario(it) }
+    }
     val seleccionarImagenLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
     ) { uri: Uri? ->
@@ -46,7 +57,6 @@ fun PerfilPantalla(
             imagenUri = uri
         }
     }
-
     val permisoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -89,6 +99,7 @@ fun PerfilPantalla(
                 )
                 .padding(padding)
                 .padding(horizontal = 24.dp, vertical = 40.dp)
+                .verticalScroll(scrollState)          // <- para poder ver la lista de boletas
         ) {
 
             Box(
@@ -106,14 +117,12 @@ fun PerfilPantalla(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                // Imagen del perfil
                 Image(
                     painter = rememberAsyncImagePainter(imagenUri ?: R.drawable.logo),
                     contentDescription = "Foto de perfil",
                     modifier = Modifier.fillMaxSize()
                 )
 
-                // lapizito icono
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -134,7 +143,7 @@ fun PerfilPantalla(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // datosusuario
+            // --- Nombre / correo ---
             Text(
                 text = usuario?.nombre ?: "Ejemplo",
                 color = Color.White,
@@ -149,7 +158,7 @@ fun PerfilPantalla(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // info usuarip
+            // --- Info usuario ---
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2C)),
@@ -165,7 +174,7 @@ fun PerfilPantalla(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Nombre: ${usuario?.nombre ?: "Clietne Ejemplo"}",
+                        text = "Nombre: ${usuario?.nombre ?: "Cliente Ejemplo"}",
                         color = Color.Gray,
                         fontSize = 14.sp
                     )
@@ -175,17 +184,62 @@ fun PerfilPantalla(
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "Tipo: ${usuario?.rol ?: "Cliente"}",
+                        text = "Tipo: ${usuario?.rol?.nombre ?: "Cliente"}",
                         color = Color.Gray,
                         fontSize = 14.sp
                     )
                 }
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // ---------- SECCIÓN BOLETAS ----------
+            Text(
+                text = "Mis boletas",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.Start)
+            )
 
-            // Boton para sali de la cuentaa
+            Spacer(modifier = Modifier.height(8.dp))
+
+            when {
+                usuario == null -> {
+                    Text(
+                        text = "Inicia sesión para ver tus boletas.",
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                }
+
+                mensajeBoletas != null -> {
+                    Text(
+                        text = mensajeBoletas ?: "",
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                }
+
+                boletas.isEmpty() -> {
+                    Text(
+                        text = "Aún no has realizado compras.",
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                }
+
+                else -> {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        boletas.forEach { boleta ->
+                            BoletaCard(boleta)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             OutlinedButton(
                 onClick = {
                     viewModel.cerrarSesion()
@@ -211,4 +265,3 @@ fun PerfilPantalla(
         }
     }
 }
-

@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ComidaRetrofitInstance {
 
-    val API_BASE_URL = "http://127.0.0.1:8080/"
+    val API_BASE_URL = "http://192.168.1.11:8080/"
 
     private val retrofit by lazy {
         Retrofit.Builder()
@@ -20,5 +20,9 @@ object ComidaRetrofitInstance {
 
     val apiUsuario: UsuarioApiService by lazy {
         retrofit.create(UsuarioApiService::class.java)
+    }
+
+    val apiBoleta: BoletaApiService by lazy {
+        retrofit.create(BoletaApiService::class.java)
     }
 }
