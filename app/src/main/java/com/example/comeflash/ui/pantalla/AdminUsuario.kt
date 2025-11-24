@@ -33,197 +33,196 @@ import com.example.comeflash.R
 import com.example.comeflash.data.model.Rol
 import com.example.comeflash.viewmodel.UsuarioViewModel
 
-@Composable
-fun AdminUsuarios(
-    navController: NavController,
-    usuarioViewModel: UsuarioViewModel
-) {
-    val usuarios by usuarioViewModel.usuarios.collectAsState()
-
-    var nombre by remember { mutableStateOf("") }
-    var correo by remember { mutableStateOf("") }
-    var contrasena by remember { mutableStateOf("") }
-    var rolNombre by remember { mutableStateOf("cliente") }  // admin / cliente
-    var editando by remember { mutableStateOf(false) }
-    var idEditando by remember { mutableStateOf<Int?>(null) }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF121212))
-            .padding(16.dp)
+    @Composable
+    fun AdminUsuarios(
+        navController: NavController,
+        usuarioViewModel: UsuarioViewModel
     ) {
-        item {
-            Text(
-                text = if (editando) "Editar usuario" else "Agregar usuario",
-                color = Color(0xFFFF9800),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(Modifier.height(8.dp))
+        val usuarios by usuarioViewModel.usuarios.collectAsState()
 
-            OutlinedTextField(
-                value = nombre,
-                onValueChange = { nombre = it },
-                label = { Text("Nombre", color = Color.White) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+        var nombre by remember { mutableStateOf("") }
+        var correo by remember { mutableStateOf("") }
+        var contrasena by remember { mutableStateOf("") }
+        var rolNombre by remember { mutableStateOf("cliente") }  // admin / cliente
+        var editando by remember { mutableStateOf(false) }
+        var idEditando by remember { mutableStateOf<Int?>(null) }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF121212))
+                .padding(16.dp)
+        ) {
+            item {
+                Text(
+                    text = if (editando) "Editar usuario" else "Agregar usuario",
+                    color = Color(0xFFFF9800),
+                    style = MaterialTheme.typography.titleLarge
                 )
-            )
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = correo,
-                onValueChange = { correo = it },
-                label = { Text("Correo", color = Color.White) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                OutlinedTextField(
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    label = { Text("Nombre", color = Color.White) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                    )
                 )
-            )
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = contrasena,
-                onValueChange = { contrasena = it },
-                label = { Text("Contraseña", color = Color.White) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                OutlinedTextField(
+                    value = correo,
+                    onValueChange = { correo = it },
+                    label = { Text("Correo", color = Color.White) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                    )
                 )
-            )
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = rolNombre,
-                onValueChange = { rolNombre = it },
-                label = { Text("Rol (admin / cliente)", color = Color.White) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                OutlinedTextField(
+                    value = contrasena,
+                    onValueChange = { contrasena = it },
+                    label = { Text("Contraseña", color = Color.White) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                    )
                 )
-            )
-            Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(8.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Button(
-                    onClick = {
-                        if (nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()) {
+                OutlinedTextField(
+                    value = rolNombre,
+                    onValueChange = { rolNombre = it },
+                    label = { Text("Rol (admin / cliente)", color = Color.White) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                    )
+                )
+                Spacer(Modifier.height(12.dp))
 
-                            // Mapear rolNombre a Rol con id (ajusta los ids a tu BD)
-                            val rol = Rol(
-                                id = if (rolNombre.equals("admin", ignoreCase = true)) 1 else 2,
-                                nombre = rolNombre.lowercase()
-                            )
-
-                            if (editando) {
-                                // Actualizar usuario existente
-                                val usuario = Usuario(
-                                    id = idEditando,
-                                    nombre = nombre,
-                                    correo = correo,
-                                    contrasena = contrasena,
-                                    rol = rol
-                                )
-                                usuarioViewModel.actualizarUsuario(usuario)
-                            } else {
-                                // Registrar nuevo usuario (el ViewModel pondrá rol por defecto si quieres)
-                                usuarioViewModel.registrar(nombre, correo, contrasena)
-                            }
-
-                            // Limpiar formulario
-                            nombre = ""
-                            correo = ""
-                            contrasena = ""
-                            rolNombre = "cliente"
-                            editando = false
-                            idEditando = null
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
-                    modifier = Modifier.weight(1f)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (editando) "Guardar cambios" else "Agregar", color = Color.White)
-                }
-
-                if (editando) {
-                    OutlinedButton(
+                    Button(
                         onClick = {
-                            editando = false
-                            idEditando = null
-                            nombre = ""
-                            correo = ""
-                            contrasena = ""
-                            rolNombre = "cliente"
+                            if (nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()) {
+
+                                val rol = usuarioViewModel.obtenerRol(rolNombre)
+
+                                if (editando) {
+                                    val usuario = Usuario(
+                                        id = idEditando,
+                                        nombre = nombre,
+                                        correo = correo,
+                                        contrasena = contrasena,
+                                        rol = rol
+                                    )
+                                    usuarioViewModel.actualizarUsuario(usuario)
+                                } else {
+                                    usuarioViewModel.registrarDesdeAdmin(
+                                        nombre = nombre,
+                                        correo = correo,
+                                        contrasena = contrasena,
+                                        rol = rol
+                                    )
+                                }
+
+                                // Reset form
+                                nombre = ""
+                                correo = ""
+                                contrasena = ""
+                                rolNombre = "cliente"
+                                editando = false
+                                idEditando = null
+                            }
                         },
-                        border = BorderStroke(1.dp, Color.Gray),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancelar", color = Color.White)
+                        Text(if (editando) "Guardar cambios" else "Agregar", color = Color.White)
+                    }
+
+                    if (editando) {
+                        OutlinedButton(
+                            onClick = {
+                                editando = false
+                                idEditando = null
+                                nombre = ""
+                                correo = ""
+                                contrasena = ""
+                                rolNombre = "cliente"
+                            },
+                            border = BorderStroke(1.dp, Color.Gray),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Cancelar", color = Color.White)
+                        }
                     }
                 }
+                Spacer(Modifier.height(24.dp))
             }
-            Spacer(Modifier.height(24.dp))
-        }
 
-        item {
-            Text(
-                "Usuarios existentes",
-                color = Color(0xFFFF9800),
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
+            item {
+                Text(
+                    "Usuarios existentes",
+                    color = Color(0xFFFF9800),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
 
-        items(usuarios) { usuario ->
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            ) {
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            items(usuarios) { usuario ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.logo),
-                        contentDescription = usuario.nombre,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                    )
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.logo),
+                            contentDescription = usuario.nombre,
+                            modifier = Modifier
+                                .size(64.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                        )
 
-                    Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.width(8.dp))
 
-                    Column(Modifier.weight(1f)) {
-                        Text(usuario.nombre, color = Color.White)
-                        Text(usuario.correo, color = Color.White)
-                        Text(usuario.rol?.nombre ?: "sin rol", color = Color.White)
-                    }
+                        Column(Modifier.weight(1f)) {
+                            Text(usuario.nombre, color = Color.White)
+                            Text(usuario.correo, color = Color.White)
+                            Text(usuario.rol?.nombre ?: "sin rol", color = Color.White)
+                        }
 
-                    IconButton(onClick = {
-                        idEditando = usuario.id
-                        nombre = usuario.nombre
-                        correo = usuario.correo
-                        contrasena = usuario.contrasena
-                        rolNombre = usuario.rol?.nombre ?: "cliente"
-                        editando = true
-                    }) {
-                        Icon(Icons.Default.Edit, contentDescription = "Editar", tint = Color(0xFFFF9800))
-                    }
+                        IconButton(onClick = {
+                            idEditando = usuario.id
+                            nombre = usuario.nombre
+                            correo = usuario.correo
+                            contrasena = usuario.contrasena
+                            rolNombre = usuario.rol?.nombre ?: "cliente"
+                            editando = true
+                        }) {
+                            Icon(Icons.Default.Edit, contentDescription = "Editar", tint = Color(0xFFFF9800))
+                        }
 
-                    IconButton(onClick = { usuarioViewModel.eliminarUsuario(usuario) }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
+                        IconButton(onClick = { usuarioViewModel.eliminarUsuario(usuario) }) {
+                            Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
+                        }
                     }
                 }
             }
         }
     }
-}

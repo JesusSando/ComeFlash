@@ -142,4 +142,35 @@ class UsuarioViewModel : AndroidViewModel {
             recargarUsuarios()
         } catch (_: Exception) { }
     }
+
+
+
+    fun obtenerRol(rolNombre: String): Rol {
+        return if (rolNombre.equals("admin", ignoreCase = true)) {
+            Rol(2, "ADMIN")
+        } else {
+            Rol(1, "CLIENTE")
+        }
+    }
+
+
+    fun registrarDesdeAdmin(
+        nombre: String,
+        correo: String,
+        contrasena: String,
+        rol: Rol
+    ) = viewModelScope.launch {
+
+        val usuario = Usuario(
+            nombre = nombre,
+            correo = correo,
+            contrasena = contrasena,
+            rol = rol
+        )
+
+        try {
+            repo.insertarUsuario(usuario)
+            recargarUsuarios()
+        } catch (e: Exception) {}
+    }
 }
