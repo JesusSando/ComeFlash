@@ -15,10 +15,9 @@ import kotlinx.coroutines.launch
 import com.example.comeflash.data.remote.*
 import com.example.comeflash.data.repository.NutrientesReposity
 
-class NutrientesViewmodel: ViewModel() {
-
-
-    private val repository = NutrientesReposity()
+class NutrientesViewmodel(
+    private val repository: NutrientesReposity = NutrientesReposity()
+) : ViewModel() {
 
     private val _nutrientes = MutableStateFlow<NutrientesComida?>(null)
     val nutrientes: StateFlow<NutrientesComida?> = _nutrientes
