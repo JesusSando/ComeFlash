@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 
 import com.example.comeflash.viewmodel.CarritoViewModel
 
-
+/*
 @Composable
 fun BoletaPantalla(
     navController: NavController,
@@ -106,3 +106,5 @@ fun BoletaPantalla(
         }
     }
 }
+
+ */

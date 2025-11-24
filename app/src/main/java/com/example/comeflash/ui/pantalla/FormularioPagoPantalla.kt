@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.navigation.NavController
 import com.example.comeflash.viewmodel.*
 
+
+/*
 @Composable
 fun FormularioPagoPantalla(
     navController: NavController,
@@ -172,3 +174,5 @@ fun CampoTexto(label: String, valor: String, onChange: (String) -> Unit) {
             .padding(vertical = 6.dp)
     )
 }
+
+ */

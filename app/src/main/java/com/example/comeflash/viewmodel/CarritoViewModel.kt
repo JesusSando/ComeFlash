@@ -1,62 +1,49 @@
 package com.example.comeflash.viewmodel
 
+
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import com.example.comeflash.data.model.Carta
 import com.example.comeflash.data.model.Comida
+import com.example.comeflash.data.repository.CartaRepository
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-data class ItemCarrito(
-    val comida: Comida,
-    val cantidad: Int
-)
-class CarritoViewModel : ViewModel() {
-    private val _items = MutableStateFlow<List<ItemCarrito>>(emptyList())
-    val items: StateFlow<List<ItemCarrito>> = _items
 
-    private val _total = MutableStateFlow(0.0)
-    val total: StateFlow<Double> = _total
 
-    fun agregar(comida: Comida) {
-        val listaActual = _items.value.toMutableList()
-        val index = listaActual.indexOfFirst { it.comida.id == comida.id }
-        if (index >= 0) {
-            val item = listaActual[index]
-            listaActual[index] = item.copy(cantidad = item.cantidad + 1)
-        } else {
-            listaActual.add(ItemCarrito(comida, 1))
-        }
-        _items.value = listaActual.toList()
-        actualizarTotal()
+class CarritoViewModel (private val repository: CartaRepository) : ViewModel() {
+
+    val cartItems: StateFlow<List<Carta>> =
+        repository.getAllCarta()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    //   precio total de los productos en el carrito
+    val total: StateFlow<Double> =
+        repository.getCartaTotal()
+            .map { it ?: 0.0 }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
+
+    //cantidad total de productos
+    val itemCount: StateFlow<Int> =
+        cartItems.map { items -> items.sumOf { it.cantidad } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+    fun addItem(comida: Comida) = viewModelScope.launch {
+        repository.addToCarta(comida)
     }
 
-    fun eliminar(comida: Comida) {
-        val listaActual = _items.value.filterNot { it.comida.id == comida.id }
-        _items.value = listaActual
-        actualizarTotal()
+    // actualizar/eliminar
+    fun updateQuantity(comida: Comida, newQuantity: Int) = viewModelScope.launch {
+        repository.updateCartaQuantity(comida, newQuantity)
     }
 
-    fun actualizarCantidad(comida: Comida, nuevaCantidad: Int) {
-        val listaActual = _items.value.toMutableList()
-        val index = listaActual.indexOfFirst { it.comida.id == comida.id }
-
-        if (index >= 0) {
-            if (nuevaCantidad <= 0) {
-                listaActual.removeAt(index)
-            } else {
-                val item = listaActual[index]
-                listaActual[index] = item.copy(cantidad = nuevaCantidad)
-            }
-            _items.value = listaActual.toList()
-            actualizarTotal()
-        }
+    // eliminar
+    fun removeItem(comida: Comida) = viewModelScope.launch {
+        repository.removeFromCarta(comida)
     }
 
-    private fun actualizarTotal() {
-        _total.value = _items.value.sumOf { it.comida.precio * it.cantidad }
+    fun clearCart() = viewModelScope.launch {
+        repository.clearCarta()
     }
-
-    fun limpiarCarrito() {
-        _items.value = emptyList()
-        _total.value = 0.0
-    }
+    // Función de soporte para el siguiente paso (Pago/API)
+    fun getCartItemsSnapshot(): List<Carta> = repository.getCartItemsSnapshot()
 }

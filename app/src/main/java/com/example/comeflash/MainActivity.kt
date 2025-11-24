@@ -30,6 +30,9 @@ import java.util.concurrent.TimeUnit
 
 import androidx.compose.runtime.CompositionLocalProvider
 import coil.compose.LocalImageLoader
+import com.example.comeflash.data.repository.CartaRepository
+import com.example.comeflash.viewmodel.CarritoViewModel
+import com.example.comeflash.viewmodel.CarritoViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -106,6 +109,12 @@ fun ComeFlashApp() {
         val navController = rememberNavController()
         val usuarioViewModel: UsuarioViewModel = viewModel()
 
+        val cartaRepository = remember { CartaRepository() }
+
+        val carritoViewModel: CarritoViewModel = viewModel(
+            factory = CarritoViewModelFactory(cartaRepository)
+        )
+
         NavHost(
             navController = navController,
             startDestination = "login"
@@ -117,7 +126,9 @@ fun ComeFlashApp() {
                 RegistroPantalla(usuarioViewModel, navController)
             }
             composable("main") {
-                NavbarPrincipal(usuarioViewModel, navController)
+                NavbarPrincipal(viewModel = usuarioViewModel,
+                    rootNavController = navController,
+                    carritoViewModel = carritoViewModel)
             }
         }
     }

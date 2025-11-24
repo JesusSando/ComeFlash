@@ -10,9 +10,9 @@ import com.example.comeflash.data.model.*
         Usuario::class,
         Compra::class,
         DetalleCompra::class,
-        Carta::class
+
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -20,7 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun compraDao(): compraDao
     abstract fun detalleCompraDao(): detalleCompraDao
-    abstract fun cartDao(): cartaDao
+
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

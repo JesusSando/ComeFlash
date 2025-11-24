@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -67,12 +68,14 @@ data class NavItem(
 @Composable
 fun NavbarPrincipal(
     viewModel: UsuarioViewModel,
-    rootNavController: NavController
+    rootNavController: NavController,
+    carritoViewModel: CarritoViewModel
 ) {
     val navController = rememberNavController()
+    val comidaViewModel: ComidaViewModel = viewModel()
+    val nutrientesViewmodel: NutrientesViewmodel = viewModel()
 
-    val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-    val carritoViewModel: CarritoViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
     Scaffold(
         bottomBar = { navbar(navController, viewModel) }
     ) { innerPadding ->
@@ -82,7 +85,7 @@ fun NavbarPrincipal(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("inicio") {
-                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
                 ProductosPantalla(
                     navController = navController,
                     rootNavController = rootNavController as NavHostController,
@@ -99,21 +102,27 @@ fun NavbarPrincipal(
                     carritoViewModel = carritoViewModel
                 )
             }
-
+/*
             composable("formularioPago") {
                 FormularioPagoPantalla(navController, carritoViewModel)
             }
 
+ */
+
+/*
             composable("boleta") {
                 BoletaPantalla(navController = navController, carritoViewModel = carritoViewModel)
             }
+
+ */
 
             composable("nosotros") { NosotrosScreen(rootNavController, viewModel) }
             composable("perfil") { PerfilPantalla(rootNavController, viewModel) }
 
            composable("adminComida") {
-                val comidaViewModel: ComidaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-                AdminComida(navController, comidaViewModel )
+                AdminComida(
+                     navController,
+                    comidaViewModel)
             }
 
 
@@ -139,6 +148,7 @@ fun NavbarPrincipal(
                         navController = navController,
                         comidaViewModel = comidaViewModel,
                         nutrientesViewModel = nutrientesViewModel,
+                        carritoViewModel = carritoViewModel,
                         comidaId = it
                     )
                 }

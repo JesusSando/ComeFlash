@@ -36,7 +36,7 @@ fun PantallaCarrito(
     viewModel: UsuarioViewModel,
     carritoViewModel: CarritoViewModel
 ) {
-    val items by carritoViewModel.items.collectAsState()
+    val items by carritoViewModel.cartItems.collectAsState()
     val total by carritoViewModel.total.collectAsState()
 
     Box(
@@ -144,7 +144,7 @@ fun PantallaCarrito(
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     IconButton(onClick = {
-                                        carritoViewModel.actualizarCantidad(item.comida, item.cantidad - 1)
+                                        carritoViewModel.updateQuantity(item.comida, item.cantidad - 1)
                                     }) {
                                         Icon(
                                             imageVector = Icons.Default.KeyboardArrowLeft,
@@ -160,7 +160,7 @@ fun PantallaCarrito(
                                     )
 
                                     IconButton(onClick = {
-                                        carritoViewModel.actualizarCantidad(item.comida, item.cantidad + 1)
+                                        carritoViewModel.updateQuantity(item.comida, item.cantidad + 1)
                                     }) {
                                         Icon(
                                             imageVector = Icons.Default.KeyboardArrowRight,
@@ -170,7 +170,7 @@ fun PantallaCarrito(
                                     }
 
                                     IconButton(onClick = {
-                                        carritoViewModel.eliminar(item.comida)
+                                        carritoViewModel.removeItem(item.comida)
                                     }) {
                                         Icon(
                                             imageVector = Icons.Default.Delete,

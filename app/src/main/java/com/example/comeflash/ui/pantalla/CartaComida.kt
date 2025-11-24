@@ -24,6 +24,7 @@ import com.example.comeflash.viewmodel.ComidaViewModel
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.comeflash.viewmodel.CarritoViewModel
 import com.example.comeflash.viewmodel.NutrientesViewmodel
 
 @Composable
@@ -31,6 +32,7 @@ fun DetalleProductoPantalla(
     navController: NavController,
     comidaViewModel: ComidaViewModel,
     nutrientesViewModel: NutrientesViewmodel,
+    carritoViewModel: CarritoViewModel,
     comidaId: Int
 ) {
 
@@ -60,10 +62,10 @@ fun DetalleProductoPantalla(
 
 
 
-    Log.d("OFF_DEBUG", "Código de barras usado: $codigo") // <-- ¡Añade esto!
+    Log.d("OFF_DEBUG", "Código de barras usado: $codigo")
     LaunchedEffect(codigo) {
         if (codigo.isNotBlank()) {
-            nutrientesViewModel.cargarNutrientes(codigo) // Llama al ViewModel
+            nutrientesViewModel.cargarNutrientes(codigo)
         }
     }
 
@@ -147,7 +149,9 @@ fun DetalleProductoPantalla(
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { /* TODO: agregar al carrito */ },
+            onClick = {comida?.let {
+                carritoViewModel.addItem(it)
+            }},
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(0.8f)

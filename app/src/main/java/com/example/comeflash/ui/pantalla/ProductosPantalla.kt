@@ -96,7 +96,7 @@ fun ProductosPantalla(
                         onAgregar = {
                             scope.launch {
                                 isLoading = true
-                                carritoViewModel.agregar(comida)
+                                carritoViewModel.addItem(comida)
                                 delay(800)
                                 isLoading = false
                             }
@@ -147,7 +147,7 @@ fun ProductosPantalla(
                         onAgregar = {
                             scope.launch {
                                 isLoading = true
-                                carritoViewModel.agregar(comida)
+                                carritoViewModel.addItem(comida)
                                 delay(800)
                                 isLoading = false
                             }
