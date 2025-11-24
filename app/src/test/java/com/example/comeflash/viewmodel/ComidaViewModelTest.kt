@@ -56,7 +56,6 @@ class ComidaViewModelTest {
             precioOferta = null,
             oferta = oferta,
             tipoComida = tipo,
-            imagenResId = "imagen_$nombre.png"
         )
     }
 

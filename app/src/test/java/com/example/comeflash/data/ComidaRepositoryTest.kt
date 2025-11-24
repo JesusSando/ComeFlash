@@ -24,7 +24,6 @@ class ComidaRepositoryTest {
         precioOferta = null,
         oferta = false,
         tipoComida = "Italiana",
-        imagenResId = "url"
     )
 
     private val comidaActualizada = comida1.copy(precio = 12000.0)

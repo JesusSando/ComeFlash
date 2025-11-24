@@ -1,12 +1,13 @@
 package com.example.comeflash.viewmodel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.comeflash.data.model.Carta
+import com.example.comeflash.data.model.Comida
 import com.example.comeflash.data.repository.CartaRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+
 class CartaViewModel(
     private val repository: CartaRepository,
     private val started: SharingStarted = SharingStarted.WhileSubscribed(5000)
@@ -22,28 +23,26 @@ class CartaViewModel(
             .stateIn(viewModelScope, started, 0.0)
 
     val itemCount: StateFlow<Int> =
-        cartItems.map { items -> items.sumOf { it.cantidad } }
+        cartItems
+            .map { items -> items.sumOf { it.cantidad } }
             .stateIn(viewModelScope, started, 0)
 
-    //para agregar un prodcto al carrito
-    fun addItem(item: Carta) = viewModelScope.launch {
-        repository.addToCarta(item)
+    // agregar un producto al carrito
+    fun addItem(comida: Comida) = viewModelScope.launch {
+        repository.addToCarta(comida)
     }
 
-    fun updateQuantity(item: Carta, newQuantity: Int) = viewModelScope.launch {
-        if (newQuantity > 0) {
-            repository.updateCarta(item.copy(cantidad = newQuantity))
-        } else {
-            repository.removeFromCarta(item)
-        }
+    // actualizar la cantidad de un producto
+    fun updateQuantity(comida: Comida, newQuantity: Int) = viewModelScope.launch {
+        repository.updateCartaQuantity(comida, newQuantity)
     }
 
-    //para eliminar un producto del carrito
-    fun removeItem(item: Carta) = viewModelScope.launch {
-        repository.removeFromCarta(item)
+    // eliminar un producto del carrito
+    fun removeItem(comida: Comida) = viewModelScope.launch {
+        repository.removeFromCarta(comida)
     }
 
-    //elimanar los producto de carrito
+    // vaciar el carrito
     fun clearCart() = viewModelScope.launch {
         repository.clearCarta()
     }

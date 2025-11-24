@@ -55,7 +55,6 @@ class ComidaViewModel : AndroidViewModel {
 
     fun actualizar(comida: Comida) = viewModelScope.launch {
         try {
-            Log.d("AdminComida", "Actualizando comida: $comida")
             repo.actualizarComida(comida)
             fetchComidas()
             _mensaje.value = "Comida actualizada correctamente"
