@@ -3,41 +3,41 @@ package com.example.comeflash.ui.pantalla
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.comeflash.viewmodel.BoletaViewModel
 
-import com.example.comeflash.viewmodel.CarritoViewModel
-
-/*
 @Composable
 fun BoletaPantalla(
     navController: NavController,
-    carritoViewModel: CarritoViewModel
+    boletaViewModel: BoletaViewModel
 ) {
+    val boleta by boletaViewModel.boletaReciente.collectAsState()
 
-    val items by carritoViewModel.items.collectAsState()
-
-    val total by carritoViewModel.total.collectAsState()
-
-    if (items.isEmpty()) {
-        Text(
-            text = "El carrito está vacío",
-            color = Color.Black,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+    if (boleta == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "No hay boleta para mostrar.",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
         return
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,30 +50,37 @@ fun BoletaPantalla(
             fontWeight = FontWeight.Bold
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Boleta #${boleta!!.id} - ${boleta!!.estado}",
+            color = Color.Gray,
+            fontSize = 14.sp
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Total de la compra: $${String.format("%.0f", total)}",
+            text = "Total de la compra: $${String.format("%.0f", boleta!!.total)}",
             color = Color(0xFFFF9800),
             fontSize = 20.sp
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //   items comprados
         LazyColumn {
-            items(items) { item ->
+            items(boleta!!.compras) { item ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = item.comida.nombre,
+                        text = "${item.cantidad} x ${item.comida.nombre}",
                         color = Color.Black,
                         fontSize = 16.sp
                     )
                     Text(
-                        text = "$${item.comida.precio * item.cantidad}",
+                        text = "$${item.precioUnitario * item.cantidad}",
                         color = Color(0xFF000000),
                         fontSize = 16.sp
                     )
@@ -84,12 +91,10 @@ fun BoletaPantalla(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        //volver al inicio
         Button(
             onClick = {
-                navController.navigate("inicio") { // Navegar a la pantalla de inicio
+                navController.navigate("inicio") {
                     popUpTo("carrito") { inclusive = true }
-                    carritoViewModel.limpiarCarrito()
                 }
             },
             modifier = Modifier
@@ -106,5 +111,3 @@ fun BoletaPantalla(
         }
     }
 }
-
- */

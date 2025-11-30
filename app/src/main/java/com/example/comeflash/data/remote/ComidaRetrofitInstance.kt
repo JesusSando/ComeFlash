@@ -21,4 +21,8 @@ object ComidaRetrofitInstance {
     val apiUsuario: UsuarioApiService by lazy {
         retrofit.create(UsuarioApiService::class.java)
     }
+
+    val apiBoleta: BoletaApiService by lazy {
+        retrofit.create(BoletaApiService::class.java)
+    }
 }
