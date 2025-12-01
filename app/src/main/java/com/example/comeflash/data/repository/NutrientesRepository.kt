@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.comeflash.data.model.NutrientesComida
 import com.example.comeflash.data.remote.OpenFoodRetrofitInstance
 
-class NutrientesReposity {
+class NutrientesRepository {
 
     suspend fun obtenerNutrientes(codigoBarras: String): NutrientesComida? {
         val apiService = OpenFoodRetrofitInstance.api

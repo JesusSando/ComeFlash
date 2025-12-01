@@ -51,6 +51,13 @@ class DetalleCompraRepositoryTest {
     }
 
     @Test
+    fun `insertarDetalle delega en dao`() = runTest {
+        coEvery { dao.insertDetalle(detalle1) } returns Unit
+        repository.insertarDetalle(detalle1)
+        coVerify(exactly = 1) { dao.insertDetalle(detalle1) }
+    }
+
+    @Test
     fun `insertarDetalles delega en dao`() = runTest {
         val lista = listOf(detalle1, detalle2)
         coEvery { dao.insertDetalles(lista) } returns Unit
