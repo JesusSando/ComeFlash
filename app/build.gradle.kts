@@ -63,7 +63,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     implementation("androidx.navigation:navigation-compose:2.8.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
-
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     val room_version = "2.8.1"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
